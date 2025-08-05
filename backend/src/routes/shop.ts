@@ -115,9 +115,9 @@ router.get('/products/:id', (req, res) => {
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
-    res.json(product);
+    return res.json(product);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch product' });
+    return res.status(500).json({ error: 'Failed to fetch product' });
   }
 });
 
@@ -146,9 +146,9 @@ router.post('/products', (req, res) => {
     };
     
     products.push(newProduct);
-    res.status(201).json(newProduct);
+    return res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create product' });
+    return res.status(500).json({ error: 'Failed to create product' });
   }
 });
 
@@ -176,9 +176,9 @@ router.put('/products/:id', (req, res) => {
       updatedAt: new Date().toISOString().split('T')[0]
     };
     
-    res.json(products[productIndex]);
+    return res.json(products[productIndex]);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update product' });
+    return res.status(500).json({ error: 'Failed to update product' });
   }
 });
 
@@ -191,9 +191,9 @@ router.delete('/products/:id', (req, res) => {
     }
     
     products.splice(productIndex, 1);
-    res.status(204).send();
+    return res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete product' });
+    return res.status(500).json({ error: 'Failed to delete product' });
   }
 });
 
@@ -240,13 +240,13 @@ router.post('/orders/create', (req, res) => {
         paymentUrl = `/api/payment/generic/${newOrder.id}`;
     }
     
-    res.status(201).json({
+    return res.status(201).json({
       orderId: newOrder.id,
       paymentUrl,
       message: 'Order created successfully'
     });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create order' });
+    return res.status(500).json({ error: 'Failed to create order' });
   }
 });
 
@@ -257,9 +257,9 @@ router.get('/orders/:id', (req, res) => {
     if (!order) {
       return res.status(404).json({ error: 'Order not found' });
     }
-    res.json(order);
+    return res.json(order);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch order' });
+    return res.status(500).json({ error: 'Failed to fetch order' });
   }
 });
 
