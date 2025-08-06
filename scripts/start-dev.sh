@@ -57,8 +57,8 @@ install_dependencies() {
     if [ -d "shared" ]; then
         print_message "Installing shared types..."
         cd shared
-        npm install
-        npm run build
+        timeout 300s npm install || { print_error "Shared types installation timed out"; exit 1; }
+        timeout 120s npm run build || { print_error "Shared types build timed out"; exit 1; }
         cd ..
         print_success "Shared types installed and built"
     fi
@@ -67,7 +67,7 @@ install_dependencies() {
     if [ -d "backend" ]; then
         print_message "Installing backend dependencies..."
         cd backend
-        npm install
+        timeout 300s npm install || { print_error "Backend dependencies installation timed out"; exit 1; }
         cd ..
         print_success "Backend dependencies installed"
     fi
@@ -76,7 +76,7 @@ install_dependencies() {
     if [ -d "frontend" ]; then
         print_message "Installing frontend dependencies..."
         cd frontend
-        npm install
+        timeout 300s npm install || { print_error "Frontend dependencies installation timed out"; exit 1; }
         cd ..
         print_success "Frontend dependencies installed"
     fi
@@ -150,19 +150,31 @@ check_health() {
     # Wait for servers to fully start
     sleep 5
     
-    # Check backend health
+    # Check backend health with timeout
     if command -v curl >/dev/null 2>&1; then
-        if curl -f http://localhost:${BACKEND_PORT:-3001}/health >/dev/null 2>&1; then
-            print_success "Backend health check passed"
-        else
-            print_warning "Backend health check failed - server may still be starting"
-        fi
+        print_message "Checking backend health (up to 30 seconds)..."
+        for i in {1..30}; do
+            if timeout 5s curl -f http://localhost:${BACKEND_PORT:-3001}/health >/dev/null 2>&1; then
+                print_success "Backend health check passed"
+                break
+            elif [ $i -eq 30 ]; then
+                print_warning "Backend health check failed after 30 seconds - check logs/backend.log"
+            else
+                sleep 1
+            fi
+        done
         
-        if curl -f http://localhost:${FRONTEND_PORT:-3000} >/dev/null 2>&1; then
-            print_success "Frontend health check passed"
-        else
-            print_warning "Frontend health check failed - server may still be starting"
-        fi
+        print_message "Checking frontend health (up to 30 seconds)..."
+        for i in {1..30}; do
+            if timeout 5s curl -f http://localhost:${FRONTEND_PORT:-3000} >/dev/null 2>&1; then
+                print_success "Frontend health check passed"
+                break
+            elif [ $i -eq 30 ]; then
+                print_warning "Frontend health check failed after 30 seconds - check logs/frontend.log"
+            else
+                sleep 1
+            fi
+        done
     else
         print_warning "curl not available - skipping health checks"
     fi

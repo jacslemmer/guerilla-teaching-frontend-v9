@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import { logger } from './utils/logger';
 import { errorHandler } from './middleware/errorHandler';
 import ServerConfigurator from './config/server';
+import shopRoutes from './routes/shop';
+import quotesRoutes from './routes/quotes';
 
 // Load environment variables
 dotenv.config();
@@ -34,6 +36,12 @@ app.get('/api/status', (req, res) => {
     environment: serverConfig.getConfig().environment
   });
 });
+
+// Shop API routes
+app.use('/api/shop', shopRoutes);
+
+// Quotes API routes
+app.use('/api/quotes', quotesRoutes);
 
 // 404 handler - must come before error handler
 app.use('*', errorHandler.notFound);

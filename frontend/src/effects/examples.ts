@@ -69,7 +69,7 @@ export const useShoppingCart = () => {
     pipe(
       Effect.sync(() => {
         try {
-          const saved = localStorage.getItem('shopCart');
+          const saved = localStorage.getItem('quoteCart');
           return saved ? JSON.parse(saved) : [];
         } catch {
           return [];
@@ -83,7 +83,7 @@ export const useShoppingCart = () => {
   const saveCart = (cart: CartItem[]) =>
     Effect.sync(() => {
       try {
-        localStorage.setItem('shopCart', JSON.stringify(cart));
+        localStorage.setItem('quoteCart', JSON.stringify(cart));
         Rx.set(cartRx, cart);
       } catch (error) {
         console.error("Failed to save cart:", error);

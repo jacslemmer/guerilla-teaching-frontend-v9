@@ -1,52 +1,44 @@
 /**
- * Effect-TS Usage Examples for Backend
+ * Backend Examples (Temporary - Effect-TS removed)
  * 
- * This module demonstrates how to use Effect-TS patterns
- * in real backend scenarios.
+ * Simple async/await examples replacing Effect-TS.
+ * TODO: Reimplement with Effect-TS once compilation issues are resolved.
  */
 
-import { Effect, pipe } from "effect";
 import { Request, Response } from "express";
+import { ApiResponse, ApiError, HttpStatus } from "@guerilla-teaching/shared-types";
 import { runEffect } from "../config/effects";
-import {
-  createSuccessResponse,
-  createErrorResponse,
-  dbOperation,
-  httpRequest,
+import { 
+  createSuccessResponse, 
+  createErrorResponse, 
+  dbOperation, 
+  httpRequest, 
   validate,
-  parseJSON,
-  withFallback
+  withFallback 
 } from "./index";
-import { ApiResponse, HttpStatus } from "@guerilla-teaching/shared-types";
 
-// Example: User validation
+// Simple User interface for examples
 interface User {
   id: string;
   email: string;
   name: string;
 }
 
+// Simple user validator
 const isUser = (data: unknown): data is User => {
-  return (
-    typeof data === "object" &&
-    data !== null &&
-    typeof (data as any).id === "string" &&
-    typeof (data as any).email === "string" &&
-    typeof (data as any).name === "string"
-  );
+  return typeof data === 'object' && 
+         data !== null && 
+         typeof (data as any).id === 'string' &&
+         typeof (data as any).email === 'string' &&
+         typeof (data as any).name === 'string';
 };
 
-// Example: Database user lookup with Effect patterns
-export const getUserFromDatabase = (userId: string): Effect.Effect<User, any, never> =>
-  dbOperation(
+// Example: Database user retrieval
+export const getUserFromDatabase = async (userId: string): Promise<User> => {
+  return await dbOperation(
     async () => {
-      // Simulate database lookup
+      // Simulate database call
       await new Promise(resolve => setTimeout(resolve, 100));
-      
-      if (userId === "invalid") {
-        throw new Error("User not found");
-      }
-      
       return {
         id: userId,
         email: `user${userId}@example.com`,
@@ -55,127 +47,126 @@ export const getUserFromDatabase = (userId: string): Effect.Effect<User, any, ne
     },
     `getUserFromDatabase(${userId})`
   );
+};
 
-// Example: External API call with fallback
-export const getUserFromExternalAPI = (userId: string): Effect.Effect<User, any, never> =>
-  pipe(
-    httpRequest(
-      async () => {
-        // Simulate external API call
-        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
-        if (!response.ok) throw new Error("API request failed");
-        return response.json();
-      },
-      `getUserFromExternalAPI(${userId})`
-    ),
-    Effect.andThen((data) => validate(data, isUser, "Invalid user data from external API"))
-  );
-
-// Example: Complete user service with fallback strategy
-export const getUser = (userId: string): Effect.Effect<ApiResponse<User>, any, never> =>
-  pipe(
-    // Try database first
-    getUserFromDatabase(userId),
-    // Fallback to external API if database fails
-    withFallback(getUserFromExternalAPI(userId)),
-    // Fallback to default user if everything fails
-    withFallback(
-      Effect.succeed({
+// Example: External API user retrieval
+export const getUserFromExternalAPI = async (userId: string): Promise<User> => {
+  return await httpRequest(
+    async () => {
+      // Simulate external API call
+      await new Promise(resolve => setTimeout(resolve, 200));
+      return {
         id: userId,
-        email: "fallback@example.com",
-        name: "Fallback User"
-      })
-    ),
-    Effect.andThen((user) => createSuccessResponse(user, "User retrieved successfully"))
+        email: `external${userId}@example.com`,
+        name: `External User ${userId}`
+      };
+    },
+    `getUserFromExternalAPI(${userId})`
   );
+};
 
-// Example: Express route handler using Effect
-export const handleGetUser = async (req: Request, res: Response) => {
+// Example: User service with fallback
+export const getUser = async (userId: string): Promise<ApiResponse<User>> => {
+  try {
+    const user = await withFallback(
+      () => getUserFromDatabase(userId),
+      () => getUserFromExternalAPI(userId)
+    );
+    return createSuccessResponse(user, "User retrieved successfully");
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Example: Express route handler
+export const handleGetUser = async (req: Request, res: Response): Promise<void> => {
   const userId = req.params.id;
   
   if (!userId) {
-    const errorResponse = await runEffect(
-      createErrorResponse("User ID is required", HttpStatus.BAD_REQUEST)
-    ).catch(err => err);
-    
-    return res.status(HttpStatus.BAD_REQUEST).json(errorResponse);
+    const errorResponse = createErrorResponse(
+      "VALIDATION_ERROR", 
+      "User ID is required", 
+      HttpStatus.BAD_REQUEST
+    );
+    res.status(HttpStatus.BAD_REQUEST).json(errorResponse);
+    return;
   }
 
   try {
-    const result = await runEffect(getUser(userId));
+    const result = await getUser(userId);
     res.status(HttpStatus.OK).json(result);
   } catch (error) {
-    const errorResponse = await runEffect(
-      createErrorResponse(
-        "Failed to retrieve user", 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        error
-      )
-    ).catch(err => err);
-    
+    const errorResponse = createErrorResponse(
+      "USER_RETRIEVAL_ERROR",
+      "Failed to retrieve user", 
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      error
+    );
     res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errorResponse);
   }
 };
 
-// Example: JSON parsing with validation
-export const parseUserJSON = (jsonString: string): Effect.Effect<User, any, never> =>
-  pipe(
-    parseJSON<unknown>(jsonString, "Invalid user JSON"),
-    Effect.andThen((data) => validate(data, isUser, "Invalid user data structure"))
-  );
-
-// Example: Batch user processing
-export const processBatchUsers = (userIds: string[]): Effect.Effect<ApiResponse<User[]>, any, never> =>
-  pipe(
-    Effect.all(
-      userIds.map((id) => 
-        pipe(
-          getUser(id),
-          Effect.andThen((response) => Effect.succeed(response.data))
-        )
-      ),
-      { concurrency: 5 } // Process up to 5 users concurrently
-    ),
-    Effect.andThen((users) => 
-      createSuccessResponse(users, `Processed ${users.length} users successfully`)
-    )
-  );
+// Example: Batch processing
+export const processBatchUsers = async (userIds: string[]): Promise<ApiResponse<User[]>> => {
+  try {
+    const users: User[] = [];
+    
+    for (const userId of userIds) {
+      try {
+        const userResponse = await getUser(userId);
+        if (userResponse.data) {
+          users.push(userResponse.data);
+        }
+      } catch (error) {
+        console.error(`Failed to process user ${userId}:`, error);
+      }
+    }
+    
+    return createSuccessResponse(users, `Processed ${users.length} users successfully`);
+  } catch (error) {
+    throw createErrorResponse(
+      "BATCH_PROCESSING_ERROR",
+      "Batch processing failed",
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      error
+    );
+  }
+};
 
 // Example: Express route for batch processing
-export const handleBatchUsers = async (req: Request, res: Response) => {
+export const handleBatchUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const userIds = req.body.userIds;
     
     if (!Array.isArray(userIds)) {
-      const errorResponse = await runEffect(
-        createErrorResponse("userIds must be an array", HttpStatus.BAD_REQUEST)
-      ).catch(err => err);
-      
-      return res.status(HttpStatus.BAD_REQUEST).json(errorResponse);
+      const errorResponse = createErrorResponse(
+        "VALIDATION_ERROR",
+        "userIds must be an array",
+        HttpStatus.BAD_REQUEST
+      );
+      res.status(HttpStatus.BAD_REQUEST).json(errorResponse);
+      return;
     }
 
-    const result = await runEffect(processBatchUsers(userIds));
+    const result = await processBatchUsers(userIds);
     res.status(HttpStatus.OK).json(result);
   } catch (error) {
-    const errorResponse = await runEffect(
-      createErrorResponse(
-        "Batch processing failed", 
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        error
-      )
-    ).catch(err => err);
-    
+    const errorResponse = createErrorResponse(
+      "BATCH_PROCESSING_ERROR",
+      "Batch processing failed",
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      error
+    );
     res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errorResponse);
   }
 };
 
-// Export example handlers for documentation
+// Export simplified examples
 export const examples = {
   getUserFromDatabase,
   getUserFromExternalAPI,
   getUser,
   handleGetUser,
-  parseUserJSON,
   processBatchUsers,
   handleBatchUsers
 };

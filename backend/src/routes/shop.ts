@@ -1,23 +1,8 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import { Product } from '@guerilla-teaching/shared-types';
 
 const router = express.Router();
-
-// Product interface
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  category: string;
-  inStock: boolean;
-  featured: boolean;
-  tags: string[];
-  createdAt: string;
-  updatedAt: string;
-}
 
 // Order interface
 interface Order {
@@ -46,35 +31,106 @@ interface Order {
 }
 
 // In-memory storage (replace with database in production)
-let products: Product[] = [
+// Products array cleaned up - freestyle/example products removed
+// Ready to be populated by proper product sources (Learning Portal, Pricing 2025)
+
+// Pricing 2025 Products converted from frontend pricing tiers
+const pricing2025Products: Product[] = [
+  // IGCSE Standard Products
   {
-    id: '1',
-    name: 'IGCSE Mathematics Study Guide',
-    description: 'Comprehensive study guide covering all IGCSE Mathematics topics with practice questions and solutions.',
-    price: 299.99,
-    originalPrice: 399.99,
-    image: '/images/products/math-guide.jpg',
-    category: 'Study Guides',
+    id: 'pricing-igcse-standard-1',
+    name: 'Standard Service: 1 IGCSE Subject',
+    description: 'Choose any ONE subject from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. This is the most affordable option for SELF STUDY at your own pace.',
+    price: 350,
+    image: '/images/pricing/igcse-standard.jpg',
+    category: 'Pricing 2025',
     inStock: true,
-    featured: true,
-    tags: ['IGCSE', 'Mathematics', 'Study Guide'],
-    createdAt: '2025-01-15',
-    updatedAt: '2025-01-15'
+    featured: false,
+    tags: ['IGCSE', 'Standard', 'Self Study', 'Monthly']
   },
   {
-    id: '2',
-    name: 'AS Level Physics Workbook',
-    description: 'Interactive workbook with practical exercises and detailed explanations for AS Level Physics.',
-    price: 249.99,
-    image: '/images/products/physics-workbook.jpg',
-    category: 'Workbooks',
+    id: 'pricing-igcse-standard-bundle',
+    name: 'Standard Service IGCSE Bundle',
+    description: 'Choose any SIX subjects from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. Six subjects included for comprehensive IGCSE preparation.',
+    price: 1200,
+    image: '/images/pricing/igcse-standard-bundle.jpg',
+    category: 'Pricing 2025',
     inStock: true,
     featured: true,
-    tags: ['AS Level', 'Physics', 'Workbook'],
-    createdAt: '2025-01-10',
-    updatedAt: '2025-01-12'
+    tags: ['IGCSE', 'Standard', 'Bundle', 'Six Subjects', 'Monthly']
+  },
+  // IGCSE Premium Products
+  {
+    id: 'pricing-igcse-premium-1',
+    name: 'Premium Service: 1 IGCSE Subject',
+    description: 'Choose any ONE subject from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support via the platform\'s messaging systems.',
+    price: 650,
+    image: '/images/pricing/igcse-premium.jpg',
+    category: 'Pricing 2025',
+    inStock: true,
+    featured: true,
+    tags: ['IGCSE', 'Premium', 'Expert Assessment', 'Mock Exams', 'Monthly']
+  },
+  {
+    id: 'pricing-igcse-premium-bundle',
+    name: 'Premium Service IGCSE Bundle',
+    description: 'Choose any SIX subjects from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support. Six subjects included.',
+    price: 2999,
+    image: '/images/pricing/igcse-premium-bundle.jpg',
+    category: 'Pricing 2025',
+    inStock: true,
+    featured: true,
+    tags: ['IGCSE', 'Premium', 'Bundle', 'Six Subjects', 'Expert Support', 'Monthly']
+  },
+  // AS Level Standard Products
+  {
+    id: 'pricing-as-standard-1',
+    name: 'Standard Service IAS Level Subject',
+    description: 'Choose any ONE subject from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. This is the most affordable option for SELF STUDY at your own pace.',
+    price: 350,
+    image: '/images/pricing/as-standard.jpg',
+    category: 'Pricing 2025',
+    inStock: true,
+    featured: false,
+    tags: ['AS Level', 'Standard', 'Self Study', 'Monthly']
+  },
+  {
+    id: 'pricing-as-standard-bundle',
+    name: 'Standard Service IAS Bundle',
+    description: 'Choose any FOUR subjects from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. Four subjects included for AS Level preparation.',
+    price: 1200,
+    image: '/images/pricing/as-standard-bundle.jpg',
+    category: 'Pricing 2025',
+    inStock: true,
+    featured: false,
+    tags: ['AS Level', 'Standard', 'Bundle', 'Four Subjects', 'Monthly']
+  },
+  // AS Level Premium Products
+  {
+    id: 'pricing-as-premium-1',
+    name: 'Premium Service: 1 IAS Subject',
+    description: 'Choose any ONE subject from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support via the platform\'s messaging systems.',
+    price: 650,
+    image: '/images/pricing/as-premium.jpg',
+    category: 'Pricing 2025',
+    inStock: true,
+    featured: false,
+    tags: ['AS Level', 'Premium', 'Expert Assessment', 'Mock Exams', 'Monthly']
+  },
+  {
+    id: 'pricing-as-premium-bundle',
+    name: 'Premium Service: IAS Bundle',
+    description: 'Choose any FOUR subjects from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support. Four subjects included.',
+    price: 2500,
+    image: '/images/pricing/as-premium-bundle.jpg',
+    category: 'Pricing 2025',
+    inStock: true,
+    featured: true,
+    tags: ['AS Level', 'Premium', 'Bundle', 'Four Subjects', 'Expert Support', 'Monthly']
   }
 ];
+
+let products: Product[] = [...pricing2025Products];
 
 let orders: Order[] = [];
 
@@ -140,9 +196,7 @@ router.post('/products', (req, res) => {
       category,
       inStock: Boolean(inStock),
       featured: Boolean(featured),
-      tags: Array.isArray(tags) ? tags : [],
-      createdAt: new Date().toISOString().split('T')[0],
-      updatedAt: new Date().toISOString().split('T')[0]
+      tags: Array.isArray(tags) ? tags : []
     };
     
     products.push(newProduct);
@@ -172,8 +226,7 @@ router.put('/products/:id', (req, res) => {
       category: category || products[productIndex].category,
       inStock: inStock !== undefined ? Boolean(inStock) : products[productIndex].inStock,
       featured: featured !== undefined ? Boolean(featured) : products[productIndex].featured,
-      tags: Array.isArray(tags) ? tags : products[productIndex].tags,
-      updatedAt: new Date().toISOString().split('T')[0]
+      tags: Array.isArray(tags) ? tags : products[productIndex].tags
     };
     
     return res.json(products[productIndex]);

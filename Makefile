@@ -38,9 +38,9 @@ help: ## Show this help message
 ## Development:
 install: ## Install all dependencies
 	@echo "$(BLUE)Installing dependencies...$(NC)"
-	@if [ -d "shared" ]; then cd shared && npm install; fi
-	@if [ -d "backend" ]; then cd backend && npm install; fi
-	@if [ -d "frontend" ]; then cd frontend && npm install; fi
+	@if [ -d "shared" ]; then cd shared && timeout 300s npm install || (echo "$(RED)Shared dependencies timed out$(NC)" && exit 1); fi
+	@if [ -d "backend" ]; then cd backend && timeout 300s npm install || (echo "$(RED)Backend dependencies timed out$(NC)" && exit 1); fi
+	@if [ -d "frontend" ]; then cd frontend && timeout 300s npm install || (echo "$(RED)Frontend dependencies timed out$(NC)" && exit 1); fi
 	@echo "$(GREEN)Dependencies installed successfully!$(NC)"
 
 dev: ## Start development environment
@@ -77,7 +77,7 @@ dev-logs: ## View development logs
 ## Building & Testing:
 build: ## Build the entire stack
 	@echo "$(BLUE)Building entire stack...$(NC)"
-	@./scripts/build.sh
+	@timeout 900s ./scripts/build.sh || (echo "$(RED)Build script timed out after 15 minutes$(NC)" && exit 1)
 	@echo "$(GREEN)Build completed!$(NC)"
 
 test: ## Run all tests

@@ -87,7 +87,7 @@ install_dependencies() {
     if [ -d "shared" ]; then
         print_message "Installing shared types dependencies..."
         cd shared
-        npm ci --only=production
+        timeout 300s npm ci --only=production || { print_error "Shared types dependencies installation timed out"; exit 1; }
         cd ..
         print_success "Shared types dependencies installed"
     fi
@@ -96,7 +96,7 @@ install_dependencies() {
     if [ -d "backend" ]; then
         print_message "Installing backend dependencies..."
         cd backend
-        npm ci --only=production
+        timeout 300s npm ci --only=production || { print_error "Backend dependencies installation timed out"; exit 1; }
         cd ..
         print_success "Backend dependencies installed"
     fi
@@ -105,7 +105,7 @@ install_dependencies() {
     if [ -d "frontend" ]; then
         print_message "Installing frontend dependencies..."
         cd frontend
-        npm ci --only=production
+        timeout 300s npm ci --only=production || { print_error "Frontend dependencies installation timed out"; exit 1; }
         cd ..
         print_success "Frontend dependencies installed"
     fi
@@ -116,7 +116,7 @@ build_shared() {
     if [ -d "shared" ]; then
         print_message "Building shared types..."
         cd shared
-        npm run build
+        timeout 120s npm run build || { print_error "Shared types build timed out"; exit 1; }
         cd ..
         print_success "Shared types built successfully"
     else
@@ -130,8 +130,8 @@ build_backend() {
         print_message "Building backend..."
         cd backend
         
-        # TypeScript compilation
-        npm run build
+        # TypeScript compilation with timeout
+        timeout 180s npm run build || { print_error "Backend build timed out"; exit 1; }
         
         # Copy non-TypeScript files if needed
         if [ -d "src/templates" ]; then
@@ -158,8 +158,8 @@ build_frontend() {
         print_message "Building frontend..."
         cd frontend
         
-        # Vite build
-        npm run build
+        # Vite build with timeout
+        timeout 240s npm run build || { print_error "Frontend build timed out"; exit 1; }
         
         cd ..
         print_success "Frontend built successfully"

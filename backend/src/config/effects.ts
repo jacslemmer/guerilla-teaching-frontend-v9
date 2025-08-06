@@ -1,15 +1,14 @@
-import { Effect, Runtime, Layer } from "effect";
 import { logger } from "../utils/logger";
-import { LogLevel, LoggerConfig } from "@guerilla-teaching/shared-types";
+import { LogLevel } from "@guerilla-teaching/shared-types";
 
 /**
- * Effect-TS Configuration for Backend
+ * Backend Configuration (Temporary - Effect-TS removed)
  * 
- * This module sets up the Effect-TS runtime and provides configuration
- * for functional programming patterns in the backend.
+ * Simple configuration without Effect-TS to unblock deployment.
+ * TODO: Reimplement with Effect-TS once compilation issues are resolved.
  */
 
-// Environment configuration interface
+// Simple configuration interface
 export interface EffectConfig {
   concurrency: number;
   timeout: number;
@@ -25,54 +24,46 @@ export const defaultEffectConfig: EffectConfig = {
   logLevel: (process.env.LOG_LEVEL as LogLevel) || ("info" as LogLevel)
 };
 
-// Simple runtime without complex layers for now
-export const AppRuntime = Runtime.defaultRuntime;
-
-// Utility function to run effects in the application runtime
-export const runEffect = <A, E = never>(effect: Effect.Effect<A, E, never>) => {
-  return Runtime.runPromise(AppRuntime)(effect);
+// Simple async operation runner
+export const runEffect = async <T>(operation: () => Promise<T> | T): Promise<T> => {
+  try {
+    const result = await operation();
+    return result;
+  } catch (error) {
+    throw error;
+  }
 };
 
-// Utility function to run effects with error handling
-export const runEffectSafe = <A, E = never>(
-  effect: Effect.Effect<A, E, never>,
-  onError?: (error: E) => void
-): Promise<A | null> => {
-  return Runtime.runPromise(AppRuntime)(
-    Effect.catchAll(effect, (error) => {
-      if (onError) onError(error);
-      return Effect.succeed(null as A);
-    })
-  ).catch(() => null);
+// Utility function with error handling
+export const runEffectSafe = async <T>(
+  operation: () => Promise<T> | T,
+  onError?: (error: any) => void
+): Promise<T | null> => {
+  try {
+    const result = await operation();
+    return result;
+  } catch (error) {
+    if (onError) onError(error);
+    return null;
+  }
 };
 
-// Configuration getter effect
-export const getConfig = Effect.sync(() => defaultEffectConfig);
+// Configuration getter
+export const getConfig = (): EffectConfig => defaultEffectConfig;
 
-// Timeout utility effect
-export const withTimeout = <A, E, R>(
-  effect: Effect.Effect<A, E, R>,
-  ms: number = defaultEffectConfig.timeout
-) => Effect.timeout(effect, ms);
+// Simple logging utilities
+export const logInfo = (message: string, meta?: any): void => {
+  logger.info(message, meta);
+};
 
-// Retry utility effect
-export const withRetry = <A, E, R>(
-  effect: Effect.Effect<A, E, R>,
-  attempts: number = defaultEffectConfig.retryAttempts
-) => Effect.retry(effect, { times: attempts });
+export const logError = (message: string, meta?: any): void => {
+  logger.error(message, meta);
+};
 
-// Logging utility effects
-export const logInfo = (message: string, meta?: any) =>
-  Effect.sync(() => logger.info(message, meta));
+export const logWarn = (message: string, meta?: any): void => {
+  logger.warn(message, meta);
+};
 
-export const logError = (message: string, meta?: any) =>
-  Effect.sync(() => logger.error(message, meta));
-
-export const logWarn = (message: string, meta?: any) =>
-  Effect.sync(() => logger.warn(message, meta));
-
-export const logDebug = (message: string, meta?: any) =>
-  Effect.sync(() => logger.debug(message, meta));
-
-// Export types for external use
-// Note: EffectConfig is already exported above
+export const logDebug = (message: string, meta?: any): void => {
+  logger.debug(message, meta);
+};

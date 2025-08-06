@@ -1,24 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import './Shop.css';
+import { CartItem, Product } from '@guerilla-teaching/shared-types';
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  category: string;
-  inStock: boolean;
-  featured?: boolean;
-  tags: string[];
-}
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
+// Using shared CartItem type from @guerilla-teaching/shared-types
 
 const Shop: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -30,12 +15,11 @@ const Shop: React.FC = () => {
 
   const categories = useMemo(() => [
     { id: 'all', name: 'All Products', icon: '🛍️' },
+    { id: 'Pricing 2025', name: 'Pricing 2025', icon: '💰' },
+    { id: 'Learning Portal', name: 'Learning Portal', icon: '🎓' },
     { id: 'Study Guides', name: 'Study Guides', icon: '📚' },
     { id: 'Workbooks', name: 'Workbooks', icon: '📝' },
-    { id: 'Course Bundles', name: 'Course Bundles', icon: '📦' },
-    { id: 'Career Guidance', name: 'Career Guidance', icon: '🎯' },
-    { id: 'Tutoring', name: 'Tutoring', icon: '👨‍🏫' },
-    { id: 'Digital Content', name: 'Digital Content', icon: '💻' }
+    { id: 'Course Bundles', name: 'Course Bundles', icon: '📦' }
   ], []);
 
   useEffect(() => {
@@ -107,9 +91,27 @@ const Shop: React.FC = () => {
       }
     ];
     
-    setProducts(sampleProducts);
+    // Fetch products from backend API
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/shop/products');
+        if (response.ok) {
+          const productsData = await response.json();
+          setProducts(productsData);
+        } else {
+          console.error('Failed to fetch products');
+          setProducts([]);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setProducts([]);
+      }
+    };
+
+    fetchProducts();
+    
     // Load cart from localStorage
-    const savedCart = localStorage.getItem('shopCart');
+    const savedCart = localStorage.getItem('quoteCart');
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
@@ -117,7 +119,7 @@ const Shop: React.FC = () => {
 
   useEffect(() => {
     // Save cart to localStorage
-    localStorage.setItem('shopCart', JSON.stringify(cart));
+    localStorage.setItem('quoteCart', JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (product: Product) => {
@@ -237,13 +239,13 @@ const Shop: React.FC = () => {
           {showCart && (
             <div className="cart-sidebar">
               <div className="cart-header">
-                <h3>Shopping Cart</h3>
+                <h3>Quote Cart</h3>
                 <button className="close-cart" onClick={() => setShowCart(false)}>×</button>
               </div>
               
               {cart.length === 0 ? (
                 <div className="empty-cart">
-                  <p>Your cart is empty</p>
+                  <p>Your quote cart is empty</p>
                   <button onClick={() => setShowCart(false)}>Continue Shopping</button>
                 </div>
               ) : (

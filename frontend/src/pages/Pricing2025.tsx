@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Pricing2025.css';
+import { CartItem, Product } from '@guerilla-teaching/shared-types';
 
 interface PricingTier {
   id: string;
@@ -14,21 +15,13 @@ interface PricingTier {
   subjects: number;
 }
 
-interface CartItem {
-  product: {
-    id: string;
-    name: string;
-    price: number;
-    image: string;
-  };
-  quantity: number;
-}
+// Using shared CartItem type from @guerilla-teaching/shared-types
 
 const Pricing2025: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<'IGCSE' | 'AS Level' | 'all'>('all');
   const [showDetails, setShowDetails] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const savedCart = localStorage.getItem('shopCart');
+    const savedCart = localStorage.getItem('quoteCart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
   const [showAdded, setShowAdded] = useState<string | null>(null);
@@ -175,14 +168,19 @@ const Pricing2025: React.FC = () => {
     setShowDetails(showDetails === tierId ? null : tierId);
   };
 
-  // Add to Cart logic (same as Shop)
+  // Add to Quote Cart logic (updated for quote system)
   const addToCart = (tier: PricingTier) => {
     const priceValue = parseFloat(tier.price.replace(/[^\d.]/g, ''));
-    const product = {
+    const product: Product = {
       id: `pricing-${tier.id}`,
       name: tier.title,
+      description: tier.description,
       price: priceValue,
       image: '/images/logo.png', // Placeholder or use a relevant image
+      category: 'Pricing 2025',
+      inStock: true,
+      featured: tier.popular || false,
+      tags: [tier.category, tier.type, 'Monthly Subscription']
     };
     setCart(prevCart => {
       const existingItem = prevCart.find(item => item.product.id === product.id);
@@ -196,7 +194,7 @@ const Pricing2025: React.FC = () => {
       } else {
         newCart = [...prevCart, { product, quantity: 1 }];
       }
-      localStorage.setItem('shopCart', JSON.stringify(newCart));
+      localStorage.setItem('quoteCart', JSON.stringify(newCart));
       return newCart;
     });
     setShowAdded(tier.id);
