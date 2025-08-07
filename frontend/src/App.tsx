@@ -22,12 +22,11 @@ import Webinars from './pages/Webinars';
 import CanWeHelp from './pages/CanWeHelp';
 import Shop from './pages/Shop';
 import Checkout from './pages/Checkout';
-import OrderSuccess from './pages/OrderSuccess';
+
 import AdminShop from './pages/AdminShop';
 import AboutUs from './pages/AboutUs';
 import OurEthos from './pages/OurEthos';
 import OurClients from './pages/OurClients';
-import ASLevelCourses from './pages/ASLevelCourses';
 import BlogDetail from './pages/BlogDetail';
 
 function App() {
@@ -60,7 +59,7 @@ function App() {
             <Route path="/can-we-help" element={<CanWeHelp />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
+
             <Route path="/admin/shop" element={<AdminShop />} />
           </Routes>
         </main>

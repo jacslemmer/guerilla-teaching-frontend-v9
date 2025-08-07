@@ -7,15 +7,15 @@ import { CartItem, Product } from '@guerilla-teaching/shared-types';
 
 const Shop: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [quote, setQuote] = useState<CartItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('name');
-  const [showCart, setShowCart] = useState<boolean>(false);
+  const [showQuote, setShowQuote] = useState<boolean>(false);
 
   const categories = useMemo(() => [
-    { id: 'all', name: 'All Products', icon: '🛍️' },
-    { id: 'Pricing 2025', name: 'Pricing 2025', icon: '💰' },
+    { id: 'all', name: 'All Services', icon: '📋' },
+    { id: 'Pricing 2025', name: 'Pricing 2025', icon: '🎓' },
     { id: 'Learning Portal', name: 'Learning Portal', icon: '🎓' },
     { id: 'Study Guides', name: 'Study Guides', icon: '📚' },
     { id: 'Workbooks', name: 'Workbooks', icon: '📝' },
@@ -110,43 +110,43 @@ const Shop: React.FC = () => {
 
     fetchProducts();
     
-    // Load cart from localStorage
-    const savedCart = localStorage.getItem('quoteCart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
+    // Load quote from localStorage
+    const savedQuote = localStorage.getItem('quoteRequest');
+    if (savedQuote) {
+      setQuote(JSON.parse(savedQuote));
     }
   }, []);
 
   useEffect(() => {
-    // Save cart to localStorage
-    localStorage.setItem('quoteCart', JSON.stringify(cart));
-  }, [cart]);
+    // Save quote to localStorage
+    localStorage.setItem('quoteRequest', JSON.stringify(quote));
+  }, [quote]);
 
-  const addToCart = (product: Product) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.product.id === product.id);
+  const addToQuote = (product: Product) => {
+    setQuote(prevQuote => {
+      const existingItem = prevQuote.find(item => item.product.id === product.id);
       if (existingItem) {
-        return prevCart.map(item =>
+        return prevQuote.map(item =>
           item.product.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        return [...prevCart, { product, quantity: 1 }];
+        return [...prevQuote, { product, quantity: 1 }];
       }
     });
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart(prevCart => prevCart.filter(item => item.product.id !== productId));
+  const removeFromQuote = (productId: string) => {
+    setQuote(prevQuote => prevQuote.filter(item => item.product.id !== productId));
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromQuote(productId);
     } else {
-      setCart(prevCart =>
-        prevCart.map(item =>
+      setQuote(prevQuote =>
+        prevQuote.map(item =>
           item.product.id === productId
             ? { ...item, quantity }
             : item
@@ -155,12 +155,12 @@ const Shop: React.FC = () => {
     }
   };
 
-  const getCartTotal = () => {
-    return cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+  const getQuoteTotal = () => {
+    return quote.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   };
 
-  const getCartItemCount = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
+  const getQuoteItemCount = () => {
+    return quote.reduce((total, item) => total + item.quantity, 0);
   };
 
   const filteredProducts = products.filter(product => {
@@ -188,7 +188,7 @@ const Shop: React.FC = () => {
     <div className="shop">
       <div className="hero-section">
         <div className="container">
-          <h1>Educational Shop</h1>
+          <h1>Educational Services</h1>
           <p>Quality study materials, courses, and resources to support your learning journey</p>
         </div>
       </div>
@@ -216,10 +216,10 @@ const Shop: React.FC = () => {
               </div>
             </div>
             
-            <div className="cart-summary" onClick={() => setShowCart(!showCart)}>
-              <span className="cart-icon">🛒</span>
-              <span className="cart-count">{getCartItemCount()}</span>
-              <span className="cart-total">R {getCartTotal().toFixed(2)}</span>
+            <div className="quote-summary" onClick={() => setShowQuote(!showQuote)}>
+              <span className="quote-icon">📋</span>
+              <span className="quote-count">{getQuoteItemCount()}</span>
+              <span className="quote-total">R {getQuoteTotal().toFixed(2)}</span>
             </div>
           </div>
           
@@ -236,25 +236,25 @@ const Shop: React.FC = () => {
             ))}
           </div>
           
-          {showCart && (
-            <div className="cart-sidebar">
-              <div className="cart-header">
-                <h3>Quote Cart</h3>
-                <button className="close-cart" onClick={() => setShowCart(false)}>×</button>
+          {showQuote && (
+            <div className="quote-sidebar">
+              <div className="quote-header">
+                <h3>Quote Request</h3>
+                <button className="close-quote" onClick={() => setShowQuote(false)}>×</button>
               </div>
               
-              {cart.length === 0 ? (
-                <div className="empty-cart">
-                  <p>Your quote cart is empty</p>
-                  <button onClick={() => setShowCart(false)}>Continue Shopping</button>
+              {quote.length === 0 ? (
+                <div className="empty-quote">
+                  <p>Your quote request is empty</p>
+                  <button onClick={() => setShowQuote(false)}>Continue Exploring Services</button>
                 </div>
               ) : (
                 <>
-                  <div className="cart-items">
-                    {cart.map(item => (
-                      <div key={item.product.id} className="cart-item">
+                  <div className="quote-items">
+                    {quote.map(item => (
+                      <div key={item.product.id} className="quote-item">
                         <img src={item.product.image} alt={item.product.name} />
-                        <div className="cart-item-details">
+                        <div className="quote-item-details">
                           <h4>{item.product.name}</h4>
                           <p>R {item.product.price.toFixed(2)}</p>
                           <div className="quantity-controls">
@@ -263,17 +263,17 @@ const Shop: React.FC = () => {
                             <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>+</button>
                           </div>
                         </div>
-                        <button className="remove-item" onClick={() => removeFromCart(item.product.id)}>×</button>
+                        <button className="remove-item" onClick={() => removeFromQuote(item.product.id)}>×</button>
                       </div>
                     ))}
                   </div>
                   
-                  <div className="cart-footer">
-                    <div className="cart-total">
-                      <strong>Total: R {getCartTotal().toFixed(2)}</strong>
+                  <div className="quote-footer">
+                    <div className="quote-total">
+                      <strong>Total: R {getQuoteTotal().toFixed(2)}</strong>
                     </div>
-                    <Link to="/checkout" className="checkout-btn" onClick={() => setShowCart(false)}>
-                      Proceed to Checkout
+                    <Link to="/checkout" className="view-quote-btn" onClick={() => setShowQuote(false)}>
+                      View Quote
                     </Link>
                   </div>
                 </>
@@ -314,11 +314,11 @@ const Shop: React.FC = () => {
                   
                   <div className="product-actions">
                     <button
-                      className="add-to-cart-btn"
-                      onClick={() => addToCart(product)}
+                      className="add-to-quote-btn"
+                      onClick={() => addToQuote(product)}
                       disabled={!product.inStock}
                     >
-                      {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                      {product.inStock ? 'Add to Quote' : 'Out of Stock'}
                     </button>
                     <button className="view-details-btn">
                       View Details

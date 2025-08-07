@@ -159,7 +159,7 @@
   accent-color: #667eea;
 }
 
-.order-summary {
+.quote-summary {
   background: white;
   padding: 2rem;
   border-radius: 15px;
@@ -169,29 +169,29 @@
   top: 2rem;
 }
 
-.order-summary h2 {
+.quote-summary h2 {
   color: #2c3e50;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
 }
 
-.order-items {
+.quote-items {
   margin-bottom: 2rem;
 }
 
-.order-item {
+.quote-item {
   display: flex;
   gap: 1rem;
   padding: 1rem 0;
   border-bottom: 1px solid #e9ecef;
 }
 
-.order-item:last-child {
+.quote-item:last-child {
   border-bottom: none;
 }
 
-.order-item img {
+.quote-item img {
   width: 60px;
   height: 60px;
   object-fit: cover;
@@ -221,7 +221,7 @@
   font-size: 1rem;
 }
 
-.order-totals {
+.quote-totals {
   border-top: 2px solid #e9ecef;
   padding-top: 1.5rem;
   margin-bottom: 2rem;
@@ -243,7 +243,7 @@
   margin-top: 0.8rem;
 }
 
-.place-order-btn {
+.place-quote-btn {
   width: 100%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -257,12 +257,12 @@
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
-.place-order-btn:hover:not(:disabled) {
+.place-quote-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-.place-order-btn:disabled {
+.place-quote-btn:disabled {
   background: #bdc3c7;
   cursor: not-allowed;
   transform: none;
@@ -334,7 +334,7 @@
     grid-template-columns: 1fr;
   }
   
-  .order-summary {
+  .quote-summary {
     position: static;
   }
   
@@ -348,7 +348,7 @@
   }
 }
 
-.order-items input[type="number"] {
+.quote-items input[type="number"] {
   width: 60px;
   padding: 0.3rem;
   border: 1px solid #e9ecef;
@@ -358,7 +358,7 @@
   text-align: center;
 }
 
-.clear-cart-btn {
+.clear-quote-btn {
   background: #e74c3c;
   color: white;
   padding: 0.8rem 1.5rem;
@@ -370,11 +370,11 @@
   margin-top: 1rem;
 }
 
-.clear-cart-btn:hover {
+.clear-quote-btn:hover {
   background: #c0392b;
 }
 
-.order-items button {
+.quote-items button {
   background: none;
   border: none;
   color: #e74c3c;
@@ -386,6 +386,6 @@
   transition: background 0.2s;
 }
 
-.order-items button:hover {
+.quote-items button:hover {
   background: #f8d7da;
 } 

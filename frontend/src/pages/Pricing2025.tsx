@@ -20,9 +20,9 @@ interface PricingTier {
 const Pricing2025: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<'IGCSE' | 'AS Level' | 'all'>('all');
   const [showDetails, setShowDetails] = useState<string | null>(null);
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    const savedCart = localStorage.getItem('quoteCart');
-    return savedCart ? JSON.parse(savedCart) : [];
+  const [quote, setQuote] = useState<CartItem[]>(() => {
+    const savedQuote = localStorage.getItem('quoteRequest');
+    return savedQuote ? JSON.parse(savedQuote) : [];
   });
   const [showAdded, setShowAdded] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -168,8 +168,8 @@ const Pricing2025: React.FC = () => {
     setShowDetails(showDetails === tierId ? null : tierId);
   };
 
-  // Add to Quote Cart logic (updated for quote system)
-  const addToCart = (tier: PricingTier) => {
+  // Add to Quote logic (updated for quote system)
+  const addToQuote = (tier: PricingTier) => {
     const priceValue = parseFloat(tier.price.replace(/[^\d.]/g, ''));
     const product: Product = {
       id: `pricing-${tier.id}`,
@@ -182,28 +182,28 @@ const Pricing2025: React.FC = () => {
       featured: tier.popular || false,
       tags: [tier.category, tier.type, 'Monthly Subscription']
     };
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item.product.id === product.id);
-      let newCart;
+    setQuote(prevQuote => {
+      const existingItem = prevQuote.find(item => item.product.id === product.id);
+      let newQuote;
       if (existingItem) {
-        newCart = prevCart.map(item =>
+        newQuote = prevQuote.map(item =>
           item.product.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        newCart = [...prevCart, { product, quantity: 1 }];
+        newQuote = [...prevQuote, { product, quantity: 1 }];
       }
-      localStorage.setItem('quoteCart', JSON.stringify(newCart));
-      return newCart;
+      localStorage.setItem('quoteRequest', JSON.stringify(newQuote));
+      return newQuote;
     });
     setShowAdded(tier.id);
     setTimeout(() => setShowAdded(null), 1500);
   };
 
-  // Cart summary helpers
-  const getCartItemCount = () => cart.reduce((total, item) => total + item.quantity, 0);
-  const getCartTotal = () => cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+  // Quote summary helpers
+  const getQuoteItemCount = () => quote.reduce((total, item) => total + item.quantity, 0);
+  const getQuoteTotal = () => quote.reduce((total, item) => total + (item.product.price * item.quantity), 0);
 
   return (
     <div className="pricing-2025">
@@ -216,15 +216,15 @@ const Pricing2025: React.FC = () => {
       
       <div className="content-section">
         <div className="container">
-          {/* Cart Summary and Go to Cart */}
-          <div className="cart-summary-bar">
-            <div className="cart-summary-info">
-              <span className="cart-icon">🛒</span>
-              <span className="cart-count">{getCartItemCount()} item{getCartItemCount() !== 1 ? 's' : ''}</span>
-              <span className="cart-total">Total: R {getCartTotal().toFixed(2)}</span>
+          {/* Quote Summary and View Quote */}
+          <div className="quote-summary-bar">
+            <div className="quote-summary-info">
+              <span className="quote-icon">📋</span>
+              <span className="quote-count">{getQuoteItemCount()} item{getQuoteItemCount() !== 1 ? 's' : ''}</span>
+              <span className="quote-total">Total: R {getQuoteTotal().toFixed(2)}</span>
             </div>
-            <button className="go-to-cart-btn" onClick={() => navigate('/checkout')}>
-              Go to Cart
+            <button className="view-quote-btn" onClick={() => navigate('/checkout')}>
+              View Quote
             </button>
           </div>
 
@@ -300,13 +300,13 @@ const Pricing2025: React.FC = () => {
                           {showDetails === tier.id ? 'Show Less' : 'Learn More'}
                         </button>
                         <button
-                          className="enroll-btn add-to-cart-btn"
+                          className="enroll-btn add-to-quote-btn"
                           onClick={e => {
                             e.stopPropagation();
-                            addToCart(tier);
+                            addToQuote(tier);
                           }}
                         >
-                          {showAdded === tier.id ? 'Added!' : 'Add to Cart'}
+                          {showAdded === tier.id ? 'Added!' : 'Add to Quote'}
                         </button>
                       </div>
                     </div>
@@ -361,13 +361,13 @@ const Pricing2025: React.FC = () => {
                           {showDetails === tier.id ? 'Show Less' : 'Learn More'}
                         </button>
                         <button
-                          className="enroll-btn add-to-cart-btn"
+                          className="enroll-btn add-to-quote-btn"
                           onClick={e => {
                             e.stopPropagation();
-                            addToCart(tier);
+                            addToQuote(tier);
                           }}
                         >
-                          {showAdded === tier.id ? 'Added!' : 'Add to Cart'}
+                          {showAdded === tier.id ? 'Added!' : 'Add to Quote'}
                         </button>
                       </div>
                     </div>

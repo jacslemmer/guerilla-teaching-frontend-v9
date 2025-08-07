@@ -7,7 +7,7 @@ import { CartItem, Quote, Customer, CreateQuoteRequest, QuoteItem } from '@gueri
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [quote, setQuote] = useState<CartItem[]>([]);
   const [customerInfo, setCustomerInfo] = useState({
     firstName: '',
     lastName: '',
@@ -23,16 +23,16 @@ const Checkout: React.FC = () => {
   // Payment methods removed - this is now a quote request system
 
   useEffect(() => {
-    const savedCart = localStorage.getItem('quoteCart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
+    const savedQuote = localStorage.getItem('quoteRequest');
+    if (savedQuote) {
+      setQuote(JSON.parse(savedQuote));
     } else {
       navigate('/shop');
     }
   }, [navigate]);
 
   const getSubtotal = () => {
-    return cart.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+    return quote.reduce((total, item) => total + (item.product.price * item.quantity), 0);
   };
 
   const getTotal = () => {
@@ -72,8 +72,8 @@ const Checkout: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Convert cart items to quote items
-      const quoteItems = convertCartToQuoteItems(cart);
+      // Convert quote items to quote items
+      const quoteItems = convertCartToQuoteItems(quote);
       
       // Create customer object
       const customer: Customer = {
@@ -90,17 +90,36 @@ const Checkout: React.FC = () => {
         comments: comments.trim() || undefined
       };
 
-      // For now, simulate quote submission (will be replaced with actual API call)
-      console.log('Quote request:', quoteRequest);
+      // Submit quote to backend API
+      console.log('Submitting quote request:', quoteRequest);
       
-      // Generate temporary reference number
-      const tempReference = `GT-${new Date().getFullYear()}-${String(Date.now()).slice(-4)}`;
-      setQuoteReference(tempReference);
-      setQuoteSubmitted(true);
+      const response = await fetch('/api/quotes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(quoteRequest)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to submit quote');
+      }
+
+      const result = await response.json();
       
-      // Clear quote cart
-      localStorage.removeItem('quoteCart');
-      setCart([]);
+      if (result.success && result.quote) {
+        setQuoteReference(result.quote.referenceNumber);
+        setQuoteSubmitted(true);
+        
+        // Clear quote request
+        localStorage.removeItem('quoteRequest');
+        setQuote([]);
+        
+        console.log('Quote submitted successfully:', result.quote.referenceNumber);
+      } else {
+        throw new Error(result.message || 'Quote submission failed');
+      }
     } catch (error) {
       console.error('Quote submission error:', error);
       alert('Quote submission failed. Please try again.');
@@ -113,32 +132,32 @@ const Checkout: React.FC = () => {
 
   const updateQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
-      setCart(prevCart => prevCart.filter(item => item.product.id !== productId));
-      localStorage.setItem('quoteCart', JSON.stringify(cart.filter(item => item.product.id !== productId)));
+      setQuote(prevQuote => prevQuote.filter(item => item.product.id !== productId));
+      localStorage.setItem('quoteRequest', JSON.stringify(quote.filter(item => item.product.id !== productId)));
     } else {
-      setCart(prevCart => {
-        const newCart = prevCart.map(item =>
+      setQuote(prevQuote => {
+        const newQuote = prevQuote.map(item =>
           item.product.id === productId
             ? { ...item, quantity }
             : item
         );
-        localStorage.setItem('quoteCart', JSON.stringify(newCart));
-        return newCart;
+        localStorage.setItem('quoteRequest', JSON.stringify(newQuote));
+        return newQuote;
       });
     }
   };
 
-  const clearCart = () => {
-    setCart([]);
-    localStorage.removeItem('quoteCart');
+  const clearQuote = () => {
+    setQuote([]);
+    localStorage.removeItem('quoteRequest');
   };
 
-  if (cart.length === 0 && !quoteSubmitted) {
+  if (quote.length === 0 && !quoteSubmitted) {
     return (
       <div className="checkout-empty">
-        <h2>Your quote cart is empty</h2>
-        <p>Please add some items to your quote cart before requesting a quote.</p>
-        <button onClick={() => navigate('/shop')}>Continue Shopping</button>
+        <h2>Your quote request is empty</h2>
+        <p>Please add some items to your quote request before requesting a quote.</p>
+        <button onClick={() => navigate('/shop')}>Explore More Services</button>
       </div>
     );
   }
@@ -162,12 +181,12 @@ const Checkout: React.FC = () => {
                 <li>Our team will review your quote request</li>
                 <li>We'll contact you within 1-2 business days</li>
                 <li>We'll discuss pricing, delivery, and any customizations</li>
-                <li>Once agreed, we'll send you an invoice for payment</li>
+                <li>Once agreed, we'll send you a service agreement via email</li>
               </ul>
             </div>
             <div className="action-buttons">
               <button onClick={() => navigate('/shop')} className="btn-primary">
-                Continue Shopping
+                Explore More Services
               </button>
               <button onClick={() => navigate('/')} className="btn-secondary">
                 Back to Home
@@ -268,12 +287,12 @@ const Checkout: React.FC = () => {
               </div>
             </div>
             
-            <div className="order-summary">
+            <div className="quote-summary">
               <h2>Quote Summary</h2>
               
-              <div className="order-items">
-                {cart.map(item => (
-                  <div key={item.product.id} className="order-item">
+              <div className="quote-items">
+                {quote.map(item => (
+                  <div key={item.product.id} className="quote-item">
                     <img src={item.product.image} alt={item.product.name} />
                     <div className="item-details">
                       <h4>{item.product.name}</h4>
@@ -295,7 +314,7 @@ const Checkout: React.FC = () => {
                 ))}
               </div>
               
-              <div className="order-totals">
+              <div className="quote-totals">
                 <div className="total-row">
                   <span>Estimated Total:</span>
                   <span>R {getTotal().toFixed(2)}</span>
@@ -305,15 +324,15 @@ const Checkout: React.FC = () => {
                 </p>
               </div>
               <button 
-                className="place-order-btn" 
+                className="place-quote-btn" 
                 onClick={submitQuote} 
                 disabled={isSubmitting || !validateForm()}
                 style={{ background: '#2ecc71', borderColor: '#2ecc71' }}
               >
                 {isSubmitting ? 'Submitting Quote...' : 'Submit Quote Request'}
               </button>
-              <button className="clear-cart-btn" onClick={clearCart} style={{ marginTop: '1rem', background: '#e74c3c', color: 'white' }}>
-                Clear Quote Cart
+              <button className="clear-quote-btn" onClick={clearQuote} style={{ marginTop: '1rem', background: '#e74c3c', color: 'white' }}>
+                Clear Quote Request
               </button>
               <div className="security-notice">
                 <p>🔒 Your information is secure and confidential</p>

@@ -4,7 +4,7 @@ import { CartItem, Product } from '@guerilla-teaching/shared-types';
 
 const ASLevelQuoteCourses: React.FC = () => {
   const navigate = useNavigate();
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [quote, setQuote] = useState<CartItem[]>([]);
 
   const courses: Product[] = [
     {
@@ -43,34 +43,34 @@ const ASLevelQuoteCourses: React.FC = () => {
   ];
 
   const addToQuote = (course: Product) => {
-    const existingCart = localStorage.getItem('quoteCart');
-    let quoteCart: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
+    const existingQuote = localStorage.getItem('quoteRequest');
+    let quoteRequest: CartItem[] = existingQuote ? JSON.parse(existingQuote) : [];
 
-    const existingItem = quoteCart.find(item => item.product.id === course.id);
+    const existingItem = quoteRequest.find(item => item.product.id === course.id);
     
     if (existingItem) {
-      quoteCart = quoteCart.map(item =>
+      quoteRequest = quoteRequest.map(item =>
         item.product.id === course.id
           ? { ...item, quantity: item.quantity + 1 }
           : item
       );
     } else {
-      quoteCart.push({ product: course, quantity: 1 });
+      quoteRequest.push({ product: course, quantity: 1 });
     }
 
-    localStorage.setItem('quoteCart', JSON.stringify(quoteCart));
-    setCart([...quoteCart]);
+    localStorage.setItem('quoteRequest', JSON.stringify(quoteRequest));
+    setQuote([...quoteRequest]);
   };
 
   const goToQuote = () => {
     navigate('/checkout');
   };
 
-  const getCartCount = () => {
-    const existingCart = localStorage.getItem('quoteCart');
-    if (!existingCart) return 0;
-    const quoteCart: CartItem[] = JSON.parse(existingCart);
-    return quoteCart.reduce((total, item) => total + item.quantity, 0);
+  const getQuoteCount = () => {
+    const existingQuote = localStorage.getItem('quoteRequest');
+    if (!existingQuote) return 0;
+    const quoteRequest: CartItem[] = JSON.parse(existingQuote);
+    return quoteRequest.reduce((total, item) => total + item.quantity, 0);
   };
 
   return (
@@ -86,14 +86,14 @@ const ASLevelQuoteCourses: React.FC = () => {
         Choose from our comprehensive range of Pearson Edexcel International AS Level courses.
       </p>
 
-      {getCartCount() > 0 && (
+      {getQuoteCount() > 0 && (
         <div style={{ background: '#e8f5e8', padding: '15px', borderRadius: '8px', marginBottom: '30px' }}>
-          <span>Quote Cart: {getCartCount()} course(s)</span>
+          <span>Quote Request: {getQuoteCount()} course(s)</span>
           <button 
             onClick={goToQuote}
             style={{ marginLeft: '15px', background: '#28a745', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
           >
-            View Quote Cart
+            View Quote Request
           </button>
         </div>
       )}
@@ -127,7 +127,7 @@ const ASLevelQuoteCourses: React.FC = () => {
         ))}
       </div>
 
-      {getCartCount() > 0 && (
+      {getQuoteCount() > 0 && (
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
           <button 
             onClick={goToQuote}
@@ -141,7 +141,7 @@ const ASLevelQuoteCourses: React.FC = () => {
               fontSize: '1.1rem'
             }}
           >
-            Continue to Quote Request ({getCartCount()} courses)
+            Continue to Quote Request ({getQuoteCount()} courses)
           </button>
         </div>
       )}

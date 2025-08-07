@@ -56,107 +56,107 @@ export const useProducts = () => {
   };
 };
 
-// Example: Shopping cart management with Effect-RX
-export const useShoppingCart = () => {
-  // Cart state atom
-  const cartRx = Rx.atom<CartItem[]>("cart", []);
+// Example: Quote management with Effect-RX
+export const useQuoteCart = () => {
+  // Quote state atom
+  const quoteRx = Rx.atom<CartItem[]>("quote", []);
   
-  // Loading state for cart operations
-  const cartLoadingRx = Rx.atom("cartLoading", createLoadingState());
+  // Loading state for quote operations
+  const quoteLoadingRx = Rx.atom("quoteLoading", createLoadingState());
 
-  // Load cart from localStorage on initialization
-  const loadCart = Rx.fn("loadCart", () =>
+  // Load quote from localStorage on initialization
+  const loadQuote = Rx.fn("loadQuote", () =>
     pipe(
       Effect.sync(() => {
         try {
-          const saved = localStorage.getItem('quoteCart');
+          const saved = localStorage.getItem('quoteRequest');
           return saved ? JSON.parse(saved) : [];
         } catch {
           return [];
         }
       }),
-      Effect.tap((cart) => Effect.sync(() => Rx.set(cartRx, cart)))
+      Effect.tap((quote) => Effect.sync(() => Rx.set(quoteRx, quote)))
     )
   );
 
-  // Save cart to localStorage
-  const saveCart = (cart: CartItem[]) =>
+  // Save quote to localStorage
+  const saveQuote = (quote: CartItem[]) =>
     Effect.sync(() => {
       try {
-        localStorage.setItem('quoteCart', JSON.stringify(cart));
-        Rx.set(cartRx, cart);
+        localStorage.setItem('quoteRequest', JSON.stringify(quote));
+        Rx.set(quoteRx, quote);
       } catch (error) {
-        console.error("Failed to save cart:", error);
+        console.error("Failed to save quote:", error);
       }
     });
 
-  // Add item to cart
-  const addToCart = Rx.fn("addToCart", (product: Product, quantity: number = 1) => {
-    const currentCart = Rx.get(cartRx);
-    const existingItem = currentCart.find(item => item.id === product.id);
+  // Add item to quote
+  const addToQuote = Rx.fn("addToQuote", (product: Product, quantity: number = 1) => {
+    const currentQuote = Rx.get(quoteRx);
+    const existingItem = currentQuote.find(item => item.id === product.id);
     
-    let newCart: CartItem[];
+    let newQuote: CartItem[];
     
     if (existingItem) {
-      newCart = currentCart.map(item =>
+      newQuote = currentQuote.map(item =>
         item.id === product.id
           ? { ...item, quantity: item.quantity + quantity }
           : item
       );
     } else {
-      newCart = [...currentCart, { ...product, quantity }];
+      newQuote = [...currentQuote, { ...product, quantity }];
     }
     
-    return saveCart(newCart);
+    return saveQuote(newQuote);
   });
 
-  // Remove item from cart
-  const removeFromCart = Rx.fn("removeFromCart", (productId: string) => {
-    const currentCart = Rx.get(cartRx);
-    const newCart = currentCart.filter(item => item.id !== productId);
-    return saveCart(newCart);
+  // Remove item from quote
+  const removeFromQuote = Rx.fn("removeFromQuote", (productId: string) => {
+    const currentQuote = Rx.get(quoteRx);
+    const newQuote = currentQuote.filter(item => item.id !== productId);
+    return saveQuote(newQuote);
   });
 
   // Update item quantity
   const updateQuantity = Rx.fn("updateQuantity", (productId: string, quantity: number) => {
-    const currentCart = Rx.get(cartRx);
+    const currentQuote = Rx.get(quoteRx);
     
     if (quantity <= 0) {
-      return removeFromCart(productId);
+      return removeFromQuote(productId);
     }
     
-    const newCart = currentCart.map(item =>
+    const newQuote = currentQuote.map(item =>
       item.id === productId ? { ...item, quantity } : item
     );
     
-    return saveCart(newCart);
+    return saveQuote(newQuote);
   });
 
-  // Clear cart
-  const clearCart = Rx.fn("clearCart", () => saveCart([]));
+  // Clear quote
+  const clearQuote = Rx.fn("clearQuote", () => saveQuote([]));
 
   // Calculate total
-  const cartTotal = Rx.derived("cartTotal", (get) => {
-    const cart = get(cartRx);
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const quoteTotal = Rx.derived("quoteTotal", (get) => {
+    const quote = get(quoteRx);
+    return quote.reduce((total, item) => total + (item.price * item.quantity), 0);
   });
 
   // Calculate item count
-  const cartItemCount = Rx.derived("cartItemCount", (get) => {
-    const cart = get(cartRx);
-    return cart.reduce((count, item) => count + item.quantity, 0);
+  const quoteItemCount = Rx.derived("quoteItemCount", (get) => {
+    const quote = get(quoteRx);
+    return quote.reduce((count, item) => count + item.quantity, 0);
   });
 
   return {
-    cart: cartRx,
-    loading: cartLoadingRx,
-    total: cartTotal,
-    itemCount: cartItemCount,
-    loadCart,
-    addToCart,
-    removeFromCart,
+    quote: quoteRx,
+    loading: quoteLoadingRx,
+    total: quoteTotal,
+    itemCount: quoteItemCount,
+    loadQuote,
+    addToQuote,
+    removeFromQuote,
     updateQuantity,
-    clearCart
+    clearQuote
   };
 };
 
@@ -355,7 +355,7 @@ export const useContactForm = () => {
 // Export examples for documentation
 export const examples = {
   useProducts,
-  useShoppingCart,
+  useQuoteCart,
   useAuth,
   useContactForm
 };
