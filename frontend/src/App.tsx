@@ -15,6 +15,8 @@ import InternationalASLevels from './pages/InternationalASLevels';
 import IGCSEQuoteCourses from './pages/IGCSEQuoteCourses';
 import ASLevelQuoteCourses from './pages/ASLevelQuoteCourses';
 import GCSEcourses from './pages/GCSEcourses';
+import IGCSECoursesGrid from './pages/IGCSECoursesGrid';
+import IGCSECourseDetail from './pages/IGCSECourseDetail';
 import ASLevelCourses from './pages/ASLevelCourses';
 import Resources from './pages/Resources';
 import Articles from './pages/Articles';
@@ -48,10 +50,9 @@ function App() {
             <Route path="/learning-portal" element={<LearningPortal />} />
             <Route path="/learning-portal/igcse" element={<InternationalGCSE />} />
             <Route path="/learning-portal/as-levels" element={<InternationalASLevels />} />
-            <Route path="/learning-portal/igcse/courses" element={<GCSEcourses />} />
+            <Route path="/learning-portal/igcse/courses" element={<IGCSECoursesGrid />} />
+            <Route path="/learning-portal/igcse/courses/:courseId" element={<IGCSECourseDetail />} />
             <Route path="/learning-portal/as-levels/courses" element={<ASLevelCourses />} />
-            <Route path="/learning-portal/igcse/quote-courses" element={<IGCSEQuoteCourses />} />
-            <Route path="/learning-portal/as-levels/quote-courses" element={<ASLevelQuoteCourses />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/resources/articles" element={<Articles />} />
             <Route path="/resources/webinars" element={<Webinars />} />

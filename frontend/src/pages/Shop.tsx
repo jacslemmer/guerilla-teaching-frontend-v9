@@ -15,8 +15,8 @@ const Shop: React.FC = () => {
 
   const categories = useMemo(() => [
     { id: 'all', name: 'All Services', icon: '📋' },
-    { id: 'Pricing 2025', name: 'Pricing 2025', icon: '🎓' },
-    { id: 'Learning Portal', name: 'Learning Portal', icon: '🎓' },
+    { id: 'Courses', name: 'Courses', icon: '🎓' },
+    { id: 'Pricing 2025', name: 'Service Tiers', icon: '💰' },
     { id: 'Study Guides', name: 'Study Guides', icon: '📚' },
     { id: 'Workbooks', name: 'Workbooks', icon: '📝' },
     { id: 'Course Bundles', name: 'Course Bundles', icon: '📦' }
@@ -235,6 +235,97 @@ const Shop: React.FC = () => {
               </button>
             ))}
           </div>
+
+          {/* Featured Courses Section */}
+          {selectedCategory === 'Courses' && (
+            <div className="featured-courses-section">
+              <div className="courses-hero">
+                <h2>🎓 IGCSE & A-Level Courses</h2>
+                <p>Explore our comprehensive educational courses with expert support and proven results.</p>
+              </div>
+              
+              <div className="course-pathways">
+                <div className="pathway-card featured">
+                  <div className="pathway-header">
+                    <h3>International GCSE</h3>
+                    <div className="pathway-badge">Most Popular</div>
+                  </div>
+                  <div className="pathway-content">
+                    <p>11 comprehensive IGCSE courses with Pearson Edexcel and Cambridge qualifications. Choose from Mathematics, Sciences, Languages, Humanities, and Business.</p>
+                    <div className="pathway-features">
+                      <span>✓ 11 Course Options</span>
+                      <span>✓ Expert Support</span>
+                      <span>✓ Proven Results</span>
+                    </div>
+                    <div className="pathway-pricing">
+                      <span className="from-price">From R350/month</span>
+                      <span className="price-note">per subject</span>
+                    </div>
+                    <div className="pathway-actions">
+                      <Link to="/learning-portal/igcse" className="pathway-btn primary">
+                        View Service Tiers
+                      </Link>
+                      <Link to="/learning-portal/igcse/courses" className="pathway-btn secondary">
+                        Browse Courses
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pathway-card">
+                  <div className="pathway-header">
+                    <h3>International A-Levels</h3>
+                  </div>
+                  <div className="pathway-content">
+                    <p>Advanced level qualifications for university entry. Build on your IGCSE foundation with in-depth subject knowledge and critical thinking skills.</p>
+                    <div className="pathway-features">
+                      <span>✓ University Preparation</span>
+                      <span>✓ Advanced Content</span>
+                      <span>✓ Critical Thinking</span>
+                    </div>
+                    <div className="pathway-pricing">
+                      <span className="from-price">From R350/month</span>
+                      <span className="price-note">per subject</span>
+                    </div>
+                    <div className="pathway-actions">
+                      <Link to="/learning-portal/as-levels" className="pathway-btn primary">
+                        View Service Tiers
+                      </Link>
+                      <Link to="/learning-portal/as-levels/courses" className="pathway-btn secondary">
+                        Browse Courses
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="course-highlights">
+                <h3>Why Choose Our Courses?</h3>
+                <div className="highlights-grid">
+                  <div className="highlight-item">
+                    <div className="highlight-icon">🌟</div>
+                    <h4>Expert Support</h4>
+                    <p>Premium service includes expert assessment, feedback, and personalized support.</p>
+                  </div>
+                  <div className="highlight-item">
+                    <div className="highlight-icon">📚</div>
+                    <h4>Comprehensive Materials</h4>
+                    <p>Complete course materials, practice questions, and mock examinations.</p>
+                  </div>
+                  <div className="highlight-item">
+                    <div className="highlight-icon">🎯</div>
+                    <h4>Proven Results</h4>
+                    <p>Track record of student success with globally recognized qualifications.</p>
+                  </div>
+                  <div className="highlight-item">
+                    <div className="highlight-icon">⏰</div>
+                    <h4>Flexible Learning</h4>
+                    <p>Self-paced study options that fit around your schedule.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           
           {showQuote && (
             <div className="quote-sidebar">

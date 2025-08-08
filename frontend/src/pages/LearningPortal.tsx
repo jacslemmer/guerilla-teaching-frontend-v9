@@ -44,14 +44,14 @@ const LearningPortal: React.FC = () => {
   const solutionImages = [
     {
       title: "International GCSE",
-      description: "Pearson Edexcel International GCSE qualifications - Request a Quote",
-      link: "/learning-portal/igcse/quote-courses",
+      description: "Pearson Edexcel International GCSE qualifications - Explore Service Tiers & Courses",
+      link: "/learning-portal/igcse",
       image: GCSEStudent
     },
     {
       title: "International AS Levels",
-      description: "Pearson Edexcel International AS Level qualifications - Request a Quote",
-      link: "/learning-portal/as-levels/quote-courses",
+      description: "Pearson Edexcel International AS Level qualifications - Explore Service Tiers & Courses",
+      link: "/learning-portal/as-levels",
       image: ASStudent
     }
   ];
