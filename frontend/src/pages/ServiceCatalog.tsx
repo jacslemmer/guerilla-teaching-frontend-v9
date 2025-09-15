@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import './Shop.css';
+import './ServiceCatalog.css';
 import { CartItem, Product } from '@guerilla-teaching/shared-types';
 
-// Using shared CartItem type from @guerilla-teaching/shared-types
+// Service Catalog - Browse services and add to quote request
 
-const Shop: React.FC = () => {
+const ServiceCatalog: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [quote, setQuote] = useState<CartItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -94,7 +94,7 @@ const Shop: React.FC = () => {
     // Fetch products from backend API
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/shop/products');
+        const response = await fetch('/api/products');
         if (response.ok) {
           const productsData = await response.json();
           setProducts(productsData);
@@ -185,7 +185,7 @@ const Shop: React.FC = () => {
   });
 
   return (
-    <div className="shop">
+    <div className="service-catalog">
       <div className="hero-section">
         <div className="container">
           <h1>Educational Services</h1>
@@ -195,7 +195,7 @@ const Shop: React.FC = () => {
       
       <div className="content-section">
         <div className="container">
-          <div className="shop-header">
+          <div className="catalog-header">
             <div className="search-filters">
               <div className="search-box">
                 <input
@@ -432,4 +432,4 @@ const Shop: React.FC = () => {
   );
 };
 
-export default Shop; 
+export default ServiceCatalog; 

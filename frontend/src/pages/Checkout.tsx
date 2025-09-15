@@ -27,7 +27,7 @@ const Checkout: React.FC = () => {
     if (savedQuote) {
       setQuote(JSON.parse(savedQuote));
     } else {
-      navigate('/shop');
+      navigate('/services');
     }
   }, [navigate]);
 

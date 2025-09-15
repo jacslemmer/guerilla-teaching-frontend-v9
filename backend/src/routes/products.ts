@@ -4,31 +4,7 @@ import { Product } from '@guerilla-teaching/shared-types';
 
 const router = express.Router();
 
-// Order interface
-interface Order {
-  id: string;
-  items: Array<{
-    product: Product;
-    quantity: number;
-  }>;
-  customer: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    address: string;
-    city: string;
-    postalCode: string;
-    country: string;
-  };
-  paymentMethod: string;
-  subtotal: number;
-  shipping: number;
-  total: number;
-  currency: string;
-  status: 'pending' | 'paid' | 'failed' | 'cancelled';
-  createdAt: string;
-}
+// Product catalog routes - no order processing, just product management
 
 // In-memory storage (replace with database in production)
 // Products array cleaned up - freestyle/example products removed

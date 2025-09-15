@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import './AdminShop.css';
+import './AdminQuotes.css';
 
 interface Product {
   id: string;
@@ -16,7 +16,7 @@ interface Product {
   updatedAt: string;
 }
 
-const AdminShop: React.FC = () => {
+const AdminQuotes: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -413,4 +413,4 @@ const AdminShop: React.FC = () => {
   );
 };
 
-export default AdminShop; 
+export default AdminQuotes; 

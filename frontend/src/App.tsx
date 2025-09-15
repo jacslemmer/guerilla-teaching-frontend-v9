@@ -23,10 +23,10 @@ import Resources from './pages/Resources';
 import Articles from './pages/Articles';
 import Webinars from './pages/Webinars';
 import CanWeHelp from './pages/CanWeHelp';
-import Shop from './pages/Shop';
+import ServiceCatalog from './pages/ServiceCatalog';
 import Checkout from './pages/Checkout';
 
-import AdminShop from './pages/AdminShop';
+import AdminQuotes from './pages/AdminQuotes';
 import AboutUs from './pages/AboutUs';
 import OurEthos from './pages/OurEthos';
 import OurClients from './pages/OurClients';
@@ -59,10 +59,10 @@ function App() {
             <Route path="/resources/webinars" element={<Webinars />} />
             <Route path="/resources/articles/:id" element={<BlogDetail />} />
             <Route path="/can-we-help" element={<CanWeHelp />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/services" element={<ServiceCatalog />} />
+            <Route path="/request-quote" element={<Checkout />} />
 
-            <Route path="/admin/shop" element={<AdminShop />} />
+            <Route path="/admin/quotes" element={<AdminQuotes />} />
           </Routes>
         </main>
         <Footer />

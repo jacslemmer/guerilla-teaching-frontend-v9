@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { logger } from './utils/logger';
 import { errorHandler } from './middleware/errorHandler';
 import ServerConfigurator from './config/server';
-import shopRoutes from './routes/shop';
+import productsRoutes from './routes/products';
 import quotesRoutes from './routes/quotes';
 
 // Load environment variables
@@ -37,8 +37,8 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// Shop API routes
-app.use('/api/shop', shopRoutes);
+// Products API routes
+app.use('/api/products', productsRoutes);
 
 // Quotes API routes
 app.use('/api/quotes', quotesRoutes);

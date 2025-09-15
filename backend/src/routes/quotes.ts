@@ -11,6 +11,7 @@ import {
 } from '@guerilla-teaching/shared-types';
 import { QuoteModel, CreateQuoteParams } from '../models/Quote';
 import { quoteRepository } from '../repositories/QuoteRepository';
+import { emailService } from '../services/emailService';
 
 const router = express.Router();
 
@@ -57,6 +58,15 @@ router.post('/', async (req, res) => {
     const savedQuote = await quoteRepository.create(newQuote);
 
     console.log(`✅ Quote created successfully: ${savedQuote.referenceNumber}`);
+
+    // Send email notification to back office
+    try {
+      await emailService.sendQuoteNotification(savedQuote);
+      console.log(`📧 Email notification sent for quote: ${savedQuote.referenceNumber}`);
+    } catch (emailError) {
+      console.warn(`⚠️ Failed to send email notification for quote ${savedQuote.referenceNumber}:`, emailError);
+      // Don't fail the quote creation if email fails
+    }
 
     // Return success response
     const response = QuoteModel.createSuccessResponse(savedQuote);
