@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './OurClients.css';
 
 const OurClients: React.FC = () => {
   return (

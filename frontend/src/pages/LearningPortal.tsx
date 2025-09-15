@@ -6,7 +6,6 @@ import EthosIcon from '../assets/ETHOS ICON.jpg';
 import MissionIcon from '../assets/Mission Icon.jpg';
 import GCSEStudent from '../assets/GCSE-student.jpg';
 import ASStudent from '../assets/AS-Student.jpg';
-import './LearningPortal.css';
 
 interface Testimonial {
   id: number;

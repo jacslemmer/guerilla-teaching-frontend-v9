@@ -518,3 +518,11 @@ const IGCSECourseDetail: React.FC = () => {
 };
 
 export default IGCSECourseDetail;
+
+
+
+
+
+
+
+

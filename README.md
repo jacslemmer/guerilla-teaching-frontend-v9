@@ -1,4 +1,4 @@
-# Guerilla Teaching Website
+# Guerilla Teaching Website V9
 
 A modern, responsive website for Guerilla Teaching built with React TypeScript frontend and Node.js TypeScript backend.
 

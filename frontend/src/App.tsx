@@ -8,6 +8,7 @@ import StartHere from './pages/StartHere';
 import FAQs from './pages/FAQs';
 import RoutesToMatriculation from './pages/RoutesToMatriculation';
 import ELearningGuide from './pages/ELearningGuide';
+import ELearningGuideFixed from './pages/ELearningGuideFixed';
 import Pricing2025 from './pages/Pricing2025';
 import LearningPortal from './pages/LearningPortal';
 import InternationalGCSE from './pages/InternationalGCSE';
@@ -45,7 +46,7 @@ function App() {
             <Route path="/start-here" element={<StartHere />} />
             <Route path="/start-here/faqs" element={<FAQs />} />
             <Route path="/start-here/routes" element={<RoutesToMatriculation />} />
-            <Route path="/start-here/elearning" element={<ELearningGuide />} />
+            <Route path="/start-here/elearning" element={<ELearningGuideFixed />} />
             <Route path="/pricing-2025" element={<Pricing2025 />} />
             <Route path="/learning-portal" element={<LearningPortal />} />
             <Route path="/learning-portal/igcse" element={<InternationalGCSE />} />
