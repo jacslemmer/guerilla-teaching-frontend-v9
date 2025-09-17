@@ -9,6 +9,7 @@ export interface Customer {
   lastName: string;
   email: string;
   phone: string;
+  company?: string;
   address?: CustomerAddress;
   preferences?: CustomerPreferences;
   createdAt?: Date;

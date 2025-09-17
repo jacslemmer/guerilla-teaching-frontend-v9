@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './StartHere.css';
+import PageHeader from '../components/PageHeader';
 
 const StartHere: React.FC = () => {
   return (
     <div className="start-here">
-      <div className="hero-section">
-        <div className="container">
-          <h1>Start Here</h1>
-          <p>Begin your educational journey with Guerilla Teaching</p>
-        </div>
-      </div>
+      <PageHeader 
+        title="Start Here" 
+        subtitle="Begin your educational journey with Guerilla Teaching" 
+      />
       
       <div className="content-section">
         <div className="container">

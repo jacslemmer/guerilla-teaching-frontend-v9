@@ -23,7 +23,7 @@ import Resources from './pages/Resources';
 import Articles from './pages/Articles';
 import Webinars from './pages/Webinars';
 import CanWeHelp from './pages/CanWeHelp';
-import ServiceCatalog from './pages/ServiceCatalog';
+import QuoteCart from './pages/QuoteCart';
 import Checkout from './pages/Checkout';
 
 import AdminQuotes from './pages/AdminQuotes';
@@ -47,7 +47,7 @@ function App() {
             <Route path="/start-here/faqs" element={<FAQs />} />
             <Route path="/start-here/routes" element={<RoutesToMatriculation />} />
             <Route path="/start-here/elearning" element={<ELearningGuideFixed />} />
-            <Route path="/pricing-2025" element={<Pricing2025 />} />
+            <Route path="/shop" element={<Pricing2025 />} />
             <Route path="/learning-portal" element={<LearningPortal />} />
             <Route path="/learning-portal/igcse" element={<InternationalGCSE />} />
             <Route path="/learning-portal/as-levels" element={<InternationalASLevels />} />
@@ -59,7 +59,7 @@ function App() {
             <Route path="/resources/webinars" element={<Webinars />} />
             <Route path="/resources/articles/:id" element={<BlogDetail />} />
             <Route path="/can-we-help" element={<CanWeHelp />} />
-            <Route path="/services" element={<ServiceCatalog />} />
+            <Route path="/quote-cart" element={<QuoteCart />} />
             <Route path="/request-quote" element={<Checkout />} />
 
             <Route path="/admin/quotes" element={<AdminQuotes />} />

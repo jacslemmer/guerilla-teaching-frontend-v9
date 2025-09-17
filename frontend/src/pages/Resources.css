@@ -6,7 +6,7 @@
 .hero-section {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 4rem 0;
+  padding: 30px 0;
   text-align: center;
 }
 
@@ -69,6 +69,18 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
+.clickable-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+
+.clickable-card:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
 .resource-icon {
   font-size: 3rem;
   margin-bottom: 1.5rem;
@@ -120,6 +132,17 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
   color: white;
+}
+
+.resource-link-text {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .resources-features {

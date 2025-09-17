@@ -108,8 +108,6 @@ const pricing2025Products: Product[] = [
 
 let products: Product[] = [...pricing2025Products];
 
-let orders: Order[] = [];
-
 // Get all products
 router.get('/products', (req, res) => {
   try {
@@ -226,79 +224,6 @@ router.delete('/products/:id', (req, res) => {
   }
 });
 
-// Create order
-router.post('/orders/create', (req, res) => {
-  try {
-    const { items, customer, paymentMethod, subtotal, shipping, total, currency } = req.body;
-    
-    if (!items || !customer || !paymentMethod || !total) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-    
-    const newOrder: Order = {
-      id: uuidv4(),
-      items,
-      customer,
-      paymentMethod,
-      subtotal: parseFloat(subtotal),
-      shipping: parseFloat(shipping),
-      total: parseFloat(total),
-      currency: currency || 'ZAR',
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
-    
-    orders.push(newOrder);
-    
-    // Generate payment URL based on payment method
-    let paymentUrl = '';
-    switch (paymentMethod) {
-      case 'paygate':
-        paymentUrl = `/api/payment/paygate/${newOrder.id}`;
-        break;
-      case 'payfast':
-        paymentUrl = `/api/payment/payfast/${newOrder.id}`;
-        break;
-      case 'stripe':
-        paymentUrl = `/api/payment/stripe/${newOrder.id}`;
-        break;
-      case 'paypal':
-        paymentUrl = `/api/payment/paypal/${newOrder.id}`;
-        break;
-      default:
-        paymentUrl = `/api/payment/generic/${newOrder.id}`;
-    }
-    
-    return res.status(201).json({
-      orderId: newOrder.id,
-      paymentUrl,
-      message: 'Order created successfully'
-    });
-  } catch (error) {
-    return res.status(500).json({ error: 'Failed to create order' });
-  }
-});
-
-// Get order status
-router.get('/orders/:id', (req, res) => {
-  try {
-    const order = orders.find(o => o.id === req.params.id);
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-    return res.json(order);
-  } catch (error) {
-    return res.status(500).json({ error: 'Failed to fetch order' });
-  }
-});
-
-// Get all orders (admin only)
-router.get('/orders', (req, res) => {
-  try {
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch orders' });
-  }
-});
+// Orders removed - now using quotes system at /api/quotes
 
 export default router; 

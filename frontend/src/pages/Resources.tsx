@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Resources.css';
+import PageHeader from '../components/PageHeader';
 
 const Resources: React.FC = () => {
   return (
     <div className="resources">
-      <div className="hero-section">
-        <div className="container">
-          <h1>Resources</h1>
-          <p>Access our comprehensive collection of educational materials, insights, and learning tools</p>
-        </div>
-      </div>
+      <PageHeader 
+        title="Resources" 
+        subtitle="Access our comprehensive collection of educational materials, insights, and learning tools" 
+      />
       
       <div className="content-section">
         <div className="container">
@@ -20,7 +19,7 @@ const Resources: React.FC = () => {
           </div>
           
           <div className="resources-grid">
-            <div className="resource-card">
+            <Link to="/resources/articles" className="resource-card clickable-card">
               <div className="resource-icon">📚</div>
               <h3>Articles</h3>
               <p>In-depth educational articles covering study techniques, subject-specific insights, exam preparation strategies, and academic success tips.</p>
@@ -29,12 +28,12 @@ const Resources: React.FC = () => {
                 <span>Exam Prep</span>
                 <span>Subject Guides</span>
               </div>
-              <Link to="/resources/articles" className="resource-link">
+              <div className="resource-link-text">
                 Browse Articles
-              </Link>
-            </div>
+              </div>
+            </Link>
             
-            <div className="resource-card">
+            <Link to="/resources/webinars" className="resource-card clickable-card">
               <div className="resource-icon">🎥</div>
               <h3>Webinars</h3>
               <p>Interactive online sessions with expert educators covering current topics, study strategies, and live Q&A opportunities.</p>
@@ -43,10 +42,10 @@ const Resources: React.FC = () => {
                 <span>Expert Speakers</span>
                 <span>Q&A Sessions</span>
               </div>
-              <Link to="/resources/webinars" className="resource-link">
+              <div className="resource-link-text">
                 View Webinars
-              </Link>
-            </div>
+              </div>
+            </Link>
           </div>
           
           <div className="resources-features">

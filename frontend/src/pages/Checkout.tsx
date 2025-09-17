@@ -27,7 +27,7 @@ const Checkout: React.FC = () => {
     if (savedQuote) {
       setQuote(JSON.parse(savedQuote));
     } else {
-      navigate('/services');
+      navigate('/shop');
     }
   }, [navigate]);
 
@@ -91,7 +91,7 @@ const Checkout: React.FC = () => {
       };
 
       // Submit quote to backend API
-      console.log('Submitting quote request:', quoteRequest);
+      // Submitting quote request
       
       const response = await fetch('/api/quotes', {
         method: 'POST',
@@ -116,7 +116,7 @@ const Checkout: React.FC = () => {
         localStorage.removeItem('quoteRequest');
         setQuote([]);
         
-        console.log('Quote submitted successfully:', result.quote.referenceNumber);
+        // Quote submitted successfully
       } else {
         throw new Error(result.message || 'Quote submission failed');
       }
@@ -157,7 +157,7 @@ const Checkout: React.FC = () => {
       <div className="checkout-empty">
         <h2>Your quote request is empty</h2>
         <p>Please add some items to your quote request before requesting a quote.</p>
-        <button onClick={() => navigate('/shop')}>Explore More Services</button>
+        <button onClick={() => navigate('/shop')}>Explore More Shop</button>
       </div>
     );
   }

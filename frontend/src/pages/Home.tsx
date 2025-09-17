@@ -1,111 +1,83 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Home.css';
-import studentHero from '../assets/student-laptop-hero.jpg';
+import studentHero from '../assets/student-laptop 1620by1080.jpg';
 import serviceRemoteLearning from '../assets/service-remote-learning-svg.png';
 import serviceExamPrep from '../assets/service-exam-prep-svg.jpg';
 import serviceCurriculumDesign from '../assets/service-curriculum-design-svg.jpg';
 import serviceConsultancy from '../assets/service-consultancy-svg.jpg';
 
+// Import article images
+import Article1 from '../assets/Article1.jpg';
+import Article2 from '../assets/Article2.png';
+import Article3 from '../assets/Article3.png';
+import Article5 from '../assets/Article5.jpg';
+
 const Home: React.FC = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
-  const [contactForm, setContactForm] = useState({ 
-    name: '', 
-    email: '', 
-    phone: '', 
-    program: '', 
-    message: '' 
-  });
-  const [submitted, setSubmitted] = useState(false);
-  const [contactSubmitted, setContactSubmitted] = useState(false);
-  const [error, setError] = useState('');
-  const [contactError, setContactError] = useState('');
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleContactInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setContactForm({ ...contactForm, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name || !form.email || !form.subject) {
-      setError('Please fill in all required fields.');
-      return;
-    }
-    setError('');
-    setSubmitted(true);
-    // Here you would send the form data to your backend or email service
-  };
-
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!contactForm.name || !contactForm.email || !contactForm.program || !contactForm.message) {
-      setContactError('Please fill in all required fields.');
-      return;
-    }
-    setContactError('');
-    setContactSubmitted(true);
-    // Here you would send the contact form data to your backend or email service
-  };
+  const navigate = useNavigate();
 
   return (
     <div className="home">
-      <div className="hero-section student-hero" style={{ background: `url(${studentHero}) center 30%/cover no-repeat`, height: '900px' }}>
-        <div className="hero-content">
-          <div className="hero-text-block">
-            <h2>Learn. Anywhere. Anytime.</h2>
-            <h1>Guerilla Teaching</h1>
-            <h3>Our Mission:</h3>
-            <p>
-              To provide affordable access to quality teaching and learning materials, supporting individuals and institutions, homeschoolers and cottage schools in their educational journeys.
-            </p>
-            <button className="enroll-btn" onClick={() => setShowModal(true)}>
-              Enroll Now
-            </button>
-          </div>
-        </div>
-      </div>
+              <div className="hero-section student-hero">
+                <img 
+                  src={studentHero} 
+                  alt="Student studying with laptop" 
+                  className="hero-background-image"
+                />
+                {/* Left Text Box */}
+                <div className="hero-left-text-box">
+                  <h2>Learn. Anywhere. Anytime.</h2>
+                  <h1>Guerilla Teaching</h1>
+                </div>
 
-      {showModal && (
-        <div className="enroll-modal-overlay">
-          <div className="enroll-modal">
-            <button className="close-modal" onClick={() => { setShowModal(false); setSubmitted(false); }}>&times;</button>
-            {!submitted ? (
-              <form className="enroll-form" onSubmit={handleSubmit}>
-                <h2>Enroll Now</h2>
-                <div className="form-group">
-                  <label>Your Name *</label>
-                  <input type="text" name="name" value={form.name} onChange={handleInputChange} required />
+                {/* Right Text Box */}
+                <div className="hero-right-text-box">
+                  <h3>Our Mission:</h3>
+                  <p>
+                    To provide affordable access to quality teaching and learning materials, supporting individuals and institutions, homeschoolers and cottage schools in their educational journeys.
+                  </p>
+                  <button className="enroll-btn" onClick={() => navigate('/can-we-help')}>
+                    Enroll Now
+                  </button>
                 </div>
-                <div className="form-group">
-                  <label>Your E-mail Address *</label>
-                  <input type="email" name="email" value={form.email} onChange={handleInputChange} required />
-                </div>
-                <div className="form-group">
-                  <label>Subject *</label>
-                  <input type="text" name="subject" value={form.subject} onChange={handleInputChange} required />
-                </div>
-                <div className="form-group">
-                  <label>Message (optional)</label>
-                  <textarea name="message" value={form.message} onChange={handleInputChange} rows={4} />
-                </div>
-                {error && <div className="form-error">{error}</div>}
-                <button type="submit" className="submit-btn">Submit</button>
-              </form>
-            ) : (
-              <div className="enroll-confirmation">
-                <h2>Thank you for your interest!</h2>
-                <p>We have received your details and will contact you soon.</p>
-                <button className="close-btn" onClick={() => setShowModal(false)}>Close</button>
               </div>
-            )}
+
+      {/* Simple Contact Link */}
+      <section className="contact-link-section">
+        <div className="container">
+          <Link to="/can-we-help" className="contact-us-link">
+            Contact Us
+          </Link>
+        </div>
+      </section>
+
+      {/* Enroll modal removed - now redirects to Can We Help page */}
+
+      {/* CEO Video Section */}
+      <section className="ceo-video-section">
+        <div className="container">
+          <h2>Message from Our CEO</h2>
+          <div className="video-container">
+            <div className="video-placeholder" onClick={() => window.open('https://www.youtube.com/watch?v=MzILQQH5SyA', '_blank')}>
+              <img 
+                src="https://img.youtube.com/vi/MzILQQH5SyA/hqdefault.jpg" 
+                alt="CEO Video - Guerilla Teaching" 
+                className="video-thumbnail"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://img.youtube.com/vi/MzILQQH5SyA/mqdefault.jpg';
+                }}
+              />
+              <div className="play-button">
+                <div className="play-icon">▶</div>
+              </div>
+            </div>
+            <div className="video-info">
+              <h3>Welcome to Guerilla Teaching</h3>
+              <p>Hear from our CEO about our mission to provide affordable access to quality teaching and learning materials for students worldwide.</p>
+            </div>
           </div>
         </div>
-      )}
+      </section>
 
       <section className="services-section">
         <h2>OUR SERVICES</h2>
@@ -140,112 +112,71 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="contact-section">
+      {/* Articles Section */}
+      <section className="articles-section">
         <div className="container">
-          <h2>Contact Us</h2>
-          <p>Get in touch with us to learn more about our programs and start your educational journey</p>
+          <div className="articles-header">
+            <p className="articles-intro">
+              <span className="brand-text">GUERILLA TEACHING</span> provides an affordable and flexible support 
+              for all your learning needs. <Link to="/about-us/our-clients" className="meet-clients-link">Meet our Clients →</Link>
+            </p>
+            <p className="articles-subtext">MORE HELP WITH PLANNING YOUR HOME SCHOOLING JOURNEY</p>
+            <h2>Secrets of learning revealed in articles</h2>
+          </div>
           
-          <div className="contact-content">
-            <div className="contact-info">
-              <h3>Get In Touch</h3>
-              <div className="contact-item">
-                <strong>Email:</strong>
-                <p>info@guerillateaching.africa</p>
+          <div className="articles-grid">
+            <Link to="/resources/articles/1" className="article-card">
+              <div className="article-image">
+                <img src={Article1} alt="The Flipped Classroom" className="article-img" />
               </div>
-              <div className="contact-item">
-                <strong>Phone:</strong>
-                <p>+27 123 456 789</p>
+              <div className="article-content">
+                <div className="article-category">TEACHING METHODOLOGY</div>
+                <h3>The Flipped Classroom</h3>
+                <div className="article-date">📅 Mar 25, 2021</div>
               </div>
-              <div className="contact-item">
-                <strong>Address:</strong>
-                <p>123 Education Street<br />Johannesburg, South Africa</p>
+            </Link>
+
+            <Link to="/resources/articles/3" className="article-card large-article">
+              <div className="article-image large">
+                <img src={Article3} alt="Why Choose Pearson" className="article-img" />
               </div>
-              <div className="contact-item">
-                <strong>Office Hours:</strong>
-                <p>Monday - Friday: 8:00 AM - 6:00 PM<br />Saturday: 9:00 AM - 2:00 PM</p>
+              <div className="article-content">
+                <div className="article-category">TEACHING METHODOLOGY</div>
+                <h3>Why Choose Pearson?</h3>
+                <div className="article-date">📅 May 05, 2025</div>
               </div>
-            </div>
-            
-            <div className="contact-form">
-              <h3>Send us a Message</h3>
-              {!contactSubmitted ? (
-                <form onSubmit={handleContactSubmit}>
-                  <div className="form-group">
-                    <input 
-                      type="text" 
-                      name="name"
-                      placeholder="Your Name" 
-                      value={contactForm.name}
-                      onChange={handleContactInputChange}
-                      required 
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input 
-                      type="email" 
-                      name="email"
-                      placeholder="Your Email" 
-                      value={contactForm.email}
-                      onChange={handleContactInputChange}
-                      required 
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input 
-                      type="tel" 
-                      name="phone"
-                      placeholder="Your Phone Number" 
-                      value={contactForm.phone}
-                      onChange={handleContactInputChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <select 
-                      name="program"
-                      value={contactForm.program}
-                      onChange={handleContactInputChange}
-                      required
-                    >
-                      <option value="">Select a Program</option>
-                      <option value="full-time">Full-Time Matriculation</option>
-                      <option value="part-time">Part-Time Matriculation</option>
-                      <option value="online">Online Matriculation</option>
-                      <option value="accelerated">Accelerated Program</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <textarea 
-                      name="message"
-                      placeholder="Your Message" 
-                      rows={5} 
-                      value={contactForm.message}
-                      onChange={handleContactInputChange}
-                      required
-                    ></textarea>
-                  </div>
-                  {contactError && <div className="form-error">{contactError}</div>}
-                  <button type="submit" className="submit-button">Send Message</button>
-                </form>
-              ) : (
-                <div className="contact-confirmation">
-                  <h4>Thank you for your message!</h4>
-                  <p>We have received your inquiry and will get back to you soon.</p>
-                  <button 
-                    className="submit-button" 
-                    onClick={() => {
-                      setContactSubmitted(false);
-                      setContactForm({ name: '', email: '', phone: '', program: '', message: '' });
-                    }}
-                  >
-                    Send Another Message
-                  </button>
-                </div>
-              )}
-            </div>
+            </Link>
+
+            <Link to="/resources/articles/2" className="article-card">
+              <div className="article-image">
+                <img src={Article2} alt="Write don't type" className="article-img" />
+              </div>
+              <div className="article-content">
+                <div className="article-category">TEACHING METHODOLOGY</div>
+                <h3>Write don't type</h3>
+                <div className="article-date">📅 May 05, 2025</div>
+              </div>
+            </Link>
+
+            <Link to="/resources/articles/5" className="article-card">
+              <div className="article-image">
+                <img src={Article5} alt="Guerilla Teaching Skills" className="article-img" />
+              </div>
+              <div className="article-content">
+                <div className="article-category">TEACHING METHODOLOGY</div>
+                <h3>Guerilla Teaching: Developing Excellent Teaching Skills</h3>
+                <div className="article-date">📅 Mar 25, 2021</div>
+              </div>
+            </Link>
+          </div>
+
+          <div className="articles-footer">
+            <p>Get into details now? <Link to="/resources/articles" className="view-articles-link">View all articles →</Link></p>
           </div>
         </div>
       </section>
+
+      {/* Contact section removed - now using simple link above */}
     </div>
   );
 };

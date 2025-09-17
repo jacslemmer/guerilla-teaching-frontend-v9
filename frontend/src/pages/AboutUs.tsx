@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './AboutUs.css';
+import PageHeader from '../components/PageHeader';
 
 const AboutUs: React.FC = () => {
   return (
     <div className="about-us">
-      <div className="about-us-header">
-        <div className="container">
-          <h1>About Us</h1>
-          <p className="subtitle">Revolutionizing Education Through Innovation</p>
-        </div>
-      </div>
+      <PageHeader 
+        title="About Us" 
+        subtitle="Revolutionizing Education Through Innovation" 
+      />
       
       <div className="about-us-content">
         <div className="intro-section">
@@ -48,27 +47,7 @@ const AboutUs: React.FC = () => {
           </div>
         </div>
 
-        <div className="stats-section">
-          <h2>Our Impact</h2>
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">10,000+</div>
-              <div className="stat-label">Students Worldwide</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">500+</div>
-              <div className="stat-label">Educational Partners</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">95%</div>
-              <div className="stat-label">Success Rate</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">50+</div>
-              <div className="stat-label">Countries Served</div>
-            </div>
-          </div>
-        </div>
+        {/* Our Impact section removed */}
       </div>
     </div>
   );

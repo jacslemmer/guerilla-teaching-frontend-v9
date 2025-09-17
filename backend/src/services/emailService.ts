@@ -16,17 +16,23 @@ export class EmailService {
   private transporter: nodemailer.Transporter;
 
   constructor(config?: EmailConfig) {
-    // For development, use a test account or configure with real SMTP
-    this.transporter = nodemailer.createTransporter({
-      host: config?.host || 'localhost',
-      port: config?.port || 587,
-      secure: config?.secure || false,
-      auth: config?.auth,
-      // For development/testing without real SMTP server
-      streamTransport: !config,
-      newline: 'unix',
-      buffer: true
-    });
+    // For development, use a simple transport that logs emails
+    if (config) {
+      // Production SMTP configuration
+      this.transporter = nodemailer.createTransport({
+        host: config.host,
+        port: config.port,
+        secure: config.secure,
+        auth: config.auth
+      });
+    } else {
+      // Development: create a test transport that logs emails
+      this.transporter = nodemailer.createTransport({
+        streamTransport: true,
+        newline: 'unix',
+        buffer: true
+      });
+    }
   }
 
   async sendQuoteNotification(quote: Quote): Promise<void> {
@@ -50,7 +56,7 @@ export class EmailService {
       }
       
     } catch (error) {
-      logger.error('Failed to send quote notification email:', error);
+      logger.error('Failed to send quote notification email:', error as Error);
       // Don't throw error to prevent quote creation failure
     }
   }
@@ -190,7 +196,7 @@ Quote expires on: ${new Date(quote.expiresAt).toLocaleDateString()}
       await this.transporter.verify();
       return true;
     } catch (error) {
-      logger.error('Email service connection test failed:', error);
+      logger.error('Email service connection test failed:', error as Error);
       return false;
     }
   }

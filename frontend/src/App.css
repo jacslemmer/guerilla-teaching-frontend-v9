@@ -188,23 +188,32 @@ main {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
+.learning-portal .values-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr !important;
+  gap: 15px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-.value-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 40px 30px;
+.learning-portal .value-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  padding: 20px 10px !important;
   border-radius: 15px;
   text-align: center;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease;
+  min-height: 300px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+/* Special styling for Ethos box (middle one) to be taller */
+.learning-portal .value-card:nth-child(2) {
+  min-height: 500px !important;
 }
 
 .value-card:hover {
@@ -212,14 +221,19 @@ main {
 }
 
 .value-card h3 {
-  color: white;
+  color: black !important;
   font-size: 1.5rem;
   margin-bottom: 20px;
+  z-index: 10;
+  position: relative;
 }
 
 .value-card p {
-  color: rgba(255, 255, 255, 0.9);
+  color: black !important;
   line-height: 1.6;
+  z-index: 10;
+  position: relative;
+  opacity: 1 !important;
 }
 
 /* Responsive */
@@ -241,7 +255,7 @@ main {
   }
   
   .values-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
   }
 } 
