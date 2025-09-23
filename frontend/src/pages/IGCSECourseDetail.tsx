@@ -318,7 +318,7 @@ const IGCSECourseDetail: React.FC = () => {
     }
 
     localStorage.setItem('quoteRequest', JSON.stringify(quoteRequest));
-    navigate('/checkout');
+    navigate('/quote-cart');
   };
 
   if (!course) {

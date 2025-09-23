@@ -26,7 +26,6 @@ interface IGCSECourse {
   duration: string;
   assessment: string;
   category: 'Sciences' | 'Languages' | 'Humanities' | 'Mathematics' | 'Business';
-  popular?: boolean;
 }
 
 const IGCSECoursesGrid: React.FC = () => {
@@ -43,8 +42,7 @@ const IGCSECoursesGrid: React.FC = () => {
       examBoard: 'Pearson',
       duration: '2 years',
       assessment: 'Two written papers',
-      category: 'Mathematics',
-      popular: true
+      category: 'Mathematics'
     },
     {
       id: 'igcse-physics',
@@ -55,8 +53,7 @@ const IGCSECoursesGrid: React.FC = () => {
       examBoard: 'Pearson',
       duration: '2 years',
       assessment: 'Two written papers + practical',
-      category: 'Sciences',
-      popular: true
+      category: 'Sciences'
     },
     {
       id: 'igcse-chemistry',
@@ -67,8 +64,7 @@ const IGCSECoursesGrid: React.FC = () => {
       examBoard: 'Pearson',
       duration: '2 years',
       assessment: 'Two written papers + practical',
-      category: 'Sciences',
-      popular: true
+      category: 'Sciences'
     },
     {
       id: 'igcse-biology',
@@ -90,8 +86,7 @@ const IGCSECoursesGrid: React.FC = () => {
       examBoard: 'Pearson',
       duration: '2 years',
       assessment: 'Reading and writing papers',
-      category: 'Languages',
-      popular: true
+      category: 'Languages'
     },
     {
       id: 'igcse-afrikaans',
@@ -135,8 +130,7 @@ const IGCSECoursesGrid: React.FC = () => {
       examBoard: 'Pearson',
       duration: '2 years',
       assessment: 'Two written papers',
-      category: 'Business',
-      popular: true
+      category: 'Business'
     },
     {
       id: 'igcse-environmental-management',
@@ -185,7 +179,7 @@ const IGCSECoursesGrid: React.FC = () => {
       image: course.image,
       category: 'IGCSE Course',
       inStock: true,
-      featured: course.popular || false,
+      featured: false,
       tags: [course.category, course.examBoard, 'IGCSE']
     };
 
@@ -207,7 +201,7 @@ const IGCSECoursesGrid: React.FC = () => {
     localStorage.setItem('quoteRequest', JSON.stringify(quoteRequest));
     
     // Navigate to checkout page
-    navigate('/checkout');
+    navigate('/quote-cart');
   };
 
   const getQuoteCount = () => {
@@ -241,7 +235,7 @@ const IGCSECoursesGrid: React.FC = () => {
               <span>🎓 {getQuoteCount()} courses in your quote request</span>
               <button 
                 className="view-quote-btn"
-                onClick={() => navigate('/checkout')}
+                onClick={() => navigate('/quote-cart')}
               >
                 View Quote Request
               </button>
@@ -274,8 +268,7 @@ const IGCSECoursesGrid: React.FC = () => {
         <div className="container">
           <div className="courses-grid">
             {filteredCourses.map((course) => (
-              <div key={course.id} className={`course-card ${course.popular ? 'popular' : ''}`}>
-                {course.popular && <div className="popular-badge">Popular Choice</div>}
+              <div key={course.id} className="course-card">
                 
                 <div className="course-image">
                   <img src={course.image} alt={course.title} />
@@ -345,7 +338,7 @@ const IGCSECoursesGrid: React.FC = () => {
               {getQuoteCount() > 0 && (
                 <button 
                   className="cta-btn secondary"
-                  onClick={() => navigate('/checkout')}
+                  onClick={() => navigate('/quote-cart')}
                 >
                   Continue to Quote ({getQuoteCount()} courses)
                 </button>

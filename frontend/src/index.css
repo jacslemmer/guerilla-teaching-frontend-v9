@@ -19,11 +19,11 @@ code {
     monospace;
 }
 
-/* Global Container */
+/* Global Container - Full width for desktop */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: none;
+  margin: 0;
+  padding: 0 2rem;
 }
 
 /* Global Button Styles */

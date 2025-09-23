@@ -79,8 +79,8 @@ const InternationalGCSE: React.FC = () => {
     localStorage.setItem('quoteRequest', JSON.stringify(quoteRequest));
     setQuote([...quoteRequest]);
     
-    // Navigate to checkout page
-    navigate('/checkout');
+    // Navigate to quote cart page
+    navigate('/quote-cart');
   };
 
   return (
@@ -199,7 +199,6 @@ const InternationalGCSE: React.FC = () => {
                   <h3>Standard Service Bundle</h3>
                   <div className="tier-subtitle">6 IGCSE Subjects</div>
                   <div className="tier-price">R1200<span>/month</span></div>
-                  <div className="popular-badge">Most Popular</div>
                 </div>
                 <div className="tier-content">
                   <p>Choose any SIX subjects from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. Six subjects included for comprehensive IGCSE preparation.</p>

@@ -349,4 +349,151 @@
   .pricing-option {
     padding: 1.5rem;
   }
+}
+
+/* Service Tiers Section */
+.service-tiers {
+  margin-bottom: 4rem;
+}
+
+.service-tiers h2 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.service-tier {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.service-tier:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.service-tier.featured-tier {
+  border: 3px solid #667eea;
+  transform: scale(1.02);
+}
+
+.service-tier.featured-tier:hover {
+  transform: scale(1.02) translateY(-5px);
+}
+
+.service-tier.premium-tier {
+  border: 2px solid #764ba2;
+}
+
+.tier-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.featured-tier .tier-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.premium-tier .tier-header {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  color: white;
+}
+
+.tier-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.tier-subtitle {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.tier-price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #667eea;
+}
+
+.featured-tier .tier-price,
+.premium-tier .tier-price {
+  color: white;
+}
+
+.tier-price span {
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.tier-content {
+  padding: 2rem;
+}
+
+.tier-content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.tier-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.tier-features li {
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  color: #555;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tier-features li:last-child {
+  border-bottom: none;
+}
+
+.tier-quote-btn {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tier-quote-btn:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.tier-quote-btn.featured {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.tier-quote-btn.featured:hover {
+  background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
 } 

@@ -7,11 +7,15 @@
 
 main {
   flex: 1;
+  margin: 0;
+  padding: 0;
 }
 
 /* Learning Portal Styles */
 .learning-portal {
   width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .solutions-section {
@@ -94,8 +98,11 @@ main {
 /* Hero Section */
 .hero-container {
   position: relative;
-  height: 500px;
+  height: 100vh;
   overflow: hidden;
+  margin-top: 0;
+  padding-top: 0;
+  background: white;
 }
 
 .hero-image {

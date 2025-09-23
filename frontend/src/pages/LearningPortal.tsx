@@ -75,20 +75,9 @@ const LearningPortal: React.FC = () => {
 
   return (
     <div className="learning-portal">
-      {/* Hero Section with Image and Circle Effect */}
+      {/* Hero Section - Clean Image Only */}
       <div className="hero-container">
         <img src={VirtualLearning} alt="Virtual Learning Environment" className="hero-image" />
-        <div className="hero-text-overlay">
-          <div className="hero-dialog">
-            <h1 className="hero-title white-text">GUERILLA TEACHING</h1>
-            <h2 className="hero-subtitle white-text">Virtual Teaching and Learning Environments</h2>
-            <div className="hero-mission">
-              <h3>Our Mission:</h3>
-              <p>To create a global network of learning communities, supported by expert, centralized quality control and assessment</p>
-            </div>
-          </div>
-        </div>
-        <div className="hero-circle"></div>
       </div>
 
       {/* Segment 2: Testimonials Section */}

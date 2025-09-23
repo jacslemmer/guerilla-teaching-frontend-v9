@@ -1,10 +1,88 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { CartItem, Product } from '@guerilla-teaching/shared-types';
 import ASPage from '../assets/ASPage.jpeg';
 import PearsonEdexcelLogo from '../assets/pearsonedexcellogo.jpg';
 import './InternationalASLevels.css';
 
 const InternationalASLevels: React.FC = () => {
+  const navigate = useNavigate();
+  const [, setQuote] = useState<CartItem[]>([]);
+
+  // Service tier products for AS Levels
+  const serviceTiers: { [key: string]: Product } = {
+    'pricing-as-standard-1': {
+      id: 'pricing-as-standard-1',
+      name: 'Standard Service: 1 AS Level Subject',
+      description: 'Choose any ONE subject from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. This is the most affordable option for SELF STUDY at your own pace.',
+      price: 350,
+      image: '/images/pricing/as-standard.jpg',
+      category: 'AS Level Service',
+      inStock: true,
+      featured: false,
+      tags: ['AS Level', 'Standard', 'Self Study', 'Monthly']
+    },
+    'pricing-as-standard-bundle': {
+      id: 'pricing-as-standard-bundle',
+      name: 'Standard Service AS Level Bundle',
+      description: 'Choose any FOUR subjects from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. Four subjects included for comprehensive AS Level preparation.',
+      price: 1200,
+      image: '/images/pricing/as-standard-bundle.jpg',
+      category: 'AS Level Service',
+      inStock: true,
+      featured: true,
+      tags: ['AS Level', 'Standard', 'Bundle', 'Four Subjects', 'Monthly']
+    },
+    'pricing-as-premium-1': {
+      id: 'pricing-as-premium-1',
+      name: 'Premium Service: 1 AS Level Subject',
+      description: 'Choose any ONE subject from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support via the platform\'s messaging systems.',
+      price: 650,
+      image: '/images/pricing/as-premium.jpg',
+      category: 'AS Level Service',
+      inStock: true,
+      featured: true,
+      tags: ['AS Level', 'Premium', 'Expert Assessment', 'Mock Exams', 'Monthly']
+    },
+    'pricing-as-premium-bundle': {
+      id: 'pricing-as-premium-bundle',
+      name: 'Premium Service AS Level Bundle',
+      description: 'Choose any FOUR subjects from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support. Four subjects included.',
+      price: 2500,
+      image: '/images/pricing/as-premium-bundle.jpg',
+      category: 'AS Level Service',
+      inStock: true,
+      featured: true,
+      tags: ['AS Level', 'Premium', 'Bundle', 'Four Subjects', 'Expert Support', 'Monthly']
+    }
+  };
+
+  const addServiceToQuote = (serviceId: string) => {
+    const service = serviceTiers[serviceId];
+    if (!service) return;
+
+    const existingQuote = localStorage.getItem('quoteRequest');
+    let quoteRequest: CartItem[] = existingQuote ? JSON.parse(existingQuote) : [];
+
+    const existingItem = quoteRequest.find(item => item.product.id === service.id);
+    
+    if (existingItem) {
+      quoteRequest = quoteRequest.map(item =>
+        item.product.id === service.id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    } else {
+      quoteRequest.push({ product: service, quantity: 1 });
+    }
+
+    localStorage.setItem('quoteRequest', JSON.stringify(quoteRequest));
+    setQuote([...quoteRequest]);
+    
+    // Navigate to quote cart page
+    navigate('/quote-cart');
+  };
+
   return (
     <div className="international-as-levels">
       <div className="breadcrumb">
@@ -89,38 +167,103 @@ const InternationalASLevels: React.FC = () => {
             </ul>
           </div>
 
-          {/* Pricing Section */}
-          <div className="pricing-section">
-            <div className="pricing-option">
-              <div className="pricing-header">
-                <span className="service-name">Standard Service IAS Level Subject</span>
-                <span className="price">R350 / month</span>
+          {/* Service Tiers Section */}
+          <div className="service-tiers">
+            <h2>Choose Your AS Level Service Tier</h2>
+            
+            <div className="tiers-grid">
+              <div className="service-tier">
+                <div className="tier-header">
+                  <h3>Standard Service</h3>
+                  <div className="tier-subtitle">1 AS Level Subject</div>
+                  <div className="tier-price">R350<span>/month</span></div>
+                </div>
+                <div className="tier-content">
+                  <p>Choose any ONE subject from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. This is the most affordable option for SELF STUDY at your own pace.</p>
+                  <ul className="tier-features">
+                    <li>✓ Course material access</li>
+                    <li>✓ Computer assessed material</li>
+                    <li>✓ Self-assessment memos</li>
+                    <li>✓ Self-paced learning</li>
+                  </ul>
+                  <button 
+                    className="tier-quote-btn"
+                    onClick={() => addServiceToQuote('pricing-as-standard-1')}
+                  >
+                    Request Quote
+                  </button>
+                </div>
               </div>
-              <p>Choose any ONE subject from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. This is the most affordable option for SELF STUDY at your own pace.</p>
-            </div>
 
-            <div className="pricing-option">
-              <div className="pricing-header">
-                <span className="service-name">Standard Service IAS Bundle</span>
-                <span className="price">R1200/month</span>
+              <div className="service-tier featured-tier">
+                <div className="tier-header">
+                  <h3>Standard Service Bundle</h3>
+                  <div className="tier-subtitle">4 AS Level Subjects</div>
+                  <div className="tier-price">R1200<span>/month</span></div>
+                </div>
+                <div className="tier-content">
+                  <p>Choose any FOUR subjects from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. Four subjects included for comprehensive AS Level preparation.</p>
+                  <ul className="tier-features">
+                    <li>✓ All Standard Service features</li>
+                    <li>✓ Four subjects included</li>
+                    <li>✓ Comprehensive coverage</li>
+                    <li>✓ Best value option</li>
+                  </ul>
+                  <button 
+                    className="tier-quote-btn featured"
+                    onClick={() => addServiceToQuote('pricing-as-standard-bundle')}
+                  >
+                    Request Quote
+                  </button>
+                </div>
               </div>
-              <p>Choose any FOUR subjects from our choice of courses. Our standard Service includes access to all course material, computer assessed material, and memos for self assessment. This is the most affordable option for SELF STUDY at your own pace.</p>
-            </div>
 
-            <div className="pricing-option">
-              <div className="pricing-header">
-                <span className="service-name">Premium Service: 1 IAS Subject</span>
-                <span className="price">R650 / month</span>
+              <div className="service-tier">
+                <div className="tier-header">
+                  <h3>Premium Service</h3>
+                  <div className="tier-subtitle">1 AS Level Subject</div>
+                  <div className="tier-price">R650<span>/month</span></div>
+                </div>
+                <div className="tier-content">
+                  <p>Choose any ONE subject from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support via the platform's messaging systems.</p>
+                  <ul className="tier-features">
+                    <li>✓ All Standard Service features</li>
+                    <li>✓ Expert assessment & feedback</li>
+                    <li>✓ MOCK examinations</li>
+                    <li>✓ Progress tracking</li>
+                    <li>✓ Personalised support</li>
+                  </ul>
+                  <button 
+                    className="tier-quote-btn"
+                    onClick={() => addServiceToQuote('pricing-as-premium-1')}
+                  >
+                    Request Quote
+                  </button>
+                </div>
               </div>
-              <p>Choose any ONE subject from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support via the platform's messaging systems.</p>
-            </div>
 
-            <div className="pricing-option">
-              <div className="pricing-header">
-                <span className="service-name">Premium Service: IAS Bundle</span>
-                <span className="price">R2500 / month</span>
+              <div className="service-tier premium-tier">
+                <div className="tier-header">
+                  <h3>Premium Service Bundle</h3>
+                  <div className="tier-subtitle">4 AS Level Subjects</div>
+                  <div className="tier-price">R2500<span>/month</span></div>
+                </div>
+                <div className="tier-content">
+                  <p>Choose any FOUR subjects from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support via the platform's messaging systems.</p>
+                  <ul className="tier-features">
+                    <li>✓ All Premium Service features</li>
+                    <li>✓ Four subjects included</li>
+                    <li>✓ Complete expert experience</li>
+                    <li>✓ Maximum support & guidance</li>
+                  </ul>
+                  <button 
+                    className="tier-quote-btn"
+                    onClick={() => addServiceToQuote('pricing-as-premium-bundle')}
+                  >
+                    Request Quote
+                  </button>
+                </div>
               </div>
-              <p>Choose any FOUR subjects from our choice of courses. Our Premium Service includes everything as per the standard service, but provides expert assessment, feedback, MOCK examinations, progress tracking, and personalised support via the platform's messaging systems.</p>
             </div>
           </div>
 

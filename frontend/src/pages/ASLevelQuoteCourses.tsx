@@ -63,7 +63,7 @@ const ASLevelQuoteCourses: React.FC = () => {
   };
 
   const goToQuote = () => {
-    navigate('/checkout');
+    navigate('/quote-cart');
   };
 
   const getQuoteCount = () => {
